@@ -7,7 +7,7 @@
     "dogslife", "adorable", "pets", "dogsofinstagram", "instaterrier",
     "cutedog", "dogoftheday", "animal", "petstagram", "blackandtan",
     "petsofinstagram", "hound", "happy_pet", "terrier", "dailydog",
-    "bestwoof"
+    "bestwoof", "cute",
   ];
   var shuffle = function(arr) {
     var random = arr.map(Math.random);
