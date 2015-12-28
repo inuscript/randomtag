@@ -18,7 +18,7 @@
   }
   var getSuffled = function(){
     var tags = masterTags.concat()
-    var rand = shuffle(randomTags).slice(0, randomTags.length * 0.9)
+    var rand = shuffle(randomTags).slice(0, randomTags.length * 0.7)
     return shuffle(tags.concat(rand))
   }
   var arrToTagStr = function(arr){
@@ -27,7 +27,6 @@
     }).join(" ")
   }
   $(function(){
-
     $("#tags").text(arrToTagStr(getSuffled()))
   })
   // Clipboard.js

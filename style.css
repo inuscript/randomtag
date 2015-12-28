@@ -1,7 +1,9 @@
 button{
   padding: 10px;
 }
-
+#amount{
+  display: block;
+}
 textarea{
   display: block;
   width: 100%;
