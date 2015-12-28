@@ -27,6 +27,8 @@
     }).join(" ")
   }
   $(function(){
-    $("#tags").text(arrToTagStr(getSuffled()))
+    $("#tags").val(arrToTagStr(getSuffled()))
   })
+  // Clipboard.js
+  new Clipboard('.btn');
 })(jQuery)
