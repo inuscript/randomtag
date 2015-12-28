@@ -12,11 +12,14 @@
     })
     return arr
   }
+  var tagLen = function(){ // min = 11 max = 30
+    var maxRandTag =  (30 - masterTags.length) - 11 
+    return 11 + Math.random() * maxRandTag
+  }
   var getSuffled = function(){
     var tags = masterTags.concat()
-    var maxRandTag =  30 - masterTags.length
-    var len = Math.min(randomTags.length * 0.7, maxRandTag)
-    var rand = shuffle(randomTags).slice(0, len)
+    var rand = shuffle(randomTags).slice(0, tagLen())
+    console.log(rand.length)
     return shuffle(tags.concat(rand))
   }
   var arrToTagStr = function(arr){
