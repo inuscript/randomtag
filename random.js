@@ -11,15 +11,15 @@
   ];
   var shuffle = function(arr) {
     var random = arr.map(Math.random);
-    return arr.sort(function(a, b) {
-      return random[a] - random[b];
+    arr.sort(function(a, b) {
+      return Math.random() - 0.5
     })
     return arr
   }
   var getSuffled = function(){
     var tags = masterTags.concat()
     var rand = shuffle(randomTags).slice(0, randomTags.length * 0.9)
-    return tags.concat(rand)
+    return shuffle(tags.concat(rand))
   }
   var arrToTagStr = function(arr){
     return arr.map(function(tag){
@@ -27,7 +27,8 @@
     }).join(" ")
   }
   $(function(){
-    $("#tags").val(arrToTagStr(getSuffled()))
+
+    $("#tags").text(arrToTagStr(getSuffled()))
   })
   // Clipboard.js
   new Clipboard('.btn');
