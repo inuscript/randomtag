@@ -12,9 +12,8 @@
     return 11 + Math.random() * maxRandTag
   }
   var getSuffled = function(randomTags){
-    var tags = masterTags.concat()
     var rand = shuffle(randomTags).slice(0, tagLen())
-    return shuffle(tags.concat(rand))
+    return shuffle(rand)
   }
   var arrToTagStr = function(arr){
     return arr.map(function(tag){
@@ -35,8 +34,11 @@
     })
   }
   var start = function(){
-    loadTags(function(tags){
-      $("#tags").text(arrToTagStr(getSuffled(tags)))
+    loadTags(function(randomTags){
+      var selectedTags = getSuffled(randomTags)
+      var tags = masterTags.concat(selectedTags)
+
+      $("#tags").text(arrToTagStr(tags))
     })
   }
   //
