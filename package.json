@@ -6,7 +6,8 @@
   "scripts": {
     "start": "static .",
     "build": "sort tags.txt -u -o tags.txt",
-    "test": "npm build"
+    "diff-check": "git diff --exit-code",
+    "test": "npm run build && npm run diff-check"
   },
   "repository": {
     "type": "git",
