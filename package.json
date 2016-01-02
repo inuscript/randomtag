@@ -5,7 +5,7 @@
   "main": "random.js",
   "scripts": {
     "start": "static .",
-    "build": "sort tags.txt -u -o tags.txt",
+    "build": "sort tags.txt -i -u -o tags.txt",
     "diff-check": "git diff --exit-code",
     "test": "npm run build && npm run diff-check"
   },
