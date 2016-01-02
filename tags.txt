@@ -12,6 +12,7 @@ cutie
 dailydog
 doggie
 doggy
+doglife
 doglover
 doglovers
 dogoftheday
@@ -51,7 +52,10 @@ picpets
 precious
 pup
 puppies
+puppiesofinstagram
 puppy
+puppylove
+puppylover
 smalldog
 terrier
 terriers
