@@ -15,12 +15,11 @@ doglover
 doglovers
 dogoftheday
 dogs
-dogsofig
 dogs_of_instagram
 dogsitting
 dogslife
+dogsofig
 dogsofinstagram
-dogs_of_instagram
 dogstagram
 happy_pet
 hound
@@ -31,8 +30,8 @@ ilovemydog
 instadog
 instagood
 instagramdogs
-instapuppy
 instapet
+instapuppy
 instaterrier
 life
 love
@@ -40,12 +39,12 @@ lovedogs
 lovepuppies
 nature
 pet
+petbox
 pets
 pets_of_instagram
 petsagram
 petsofinstagram
 petstagram
-petbox
 photooftheday
 picpets
 precious

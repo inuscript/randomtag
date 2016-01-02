@@ -5,6 +5,7 @@
   "main": "random.js",
   "scripts": {
     "start": "static .",
+    "build": "sort tags.txt -u -o tags.txt",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
