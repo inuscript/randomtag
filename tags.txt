@@ -60,3 +60,7 @@ smalldog
 terrier
 terriers
 terrierstagram
+weeklyfluff
+excellent_dogs
+topdogphoto
+dog_features
