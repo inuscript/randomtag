@@ -18,7 +18,6 @@ doglovers
 dogoftheday
 dogs
 dogs_of_instagram
-dogsitting
 dogslife
 dogsofig
 dogsofinstagram
@@ -60,3 +59,7 @@ smalldog
 terrier
 terriers
 terrierstagram
+weeklyfluff
+excellent_dogs
+topdogphoto
+dog_features
