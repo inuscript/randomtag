@@ -10,6 +10,7 @@ cute
 cutedog
 cutie
 dailydog
+dog_features
 doggie
 doggy
 doglife
@@ -22,6 +23,7 @@ dogslife
 dogsofig
 dogsofinstagram
 dogstagram
+excellent_dogs
 happy_pet
 hound
 hounds
@@ -59,7 +61,5 @@ smalldog
 terrier
 terriers
 terrierstagram
-weeklyfluff
-excellent_dogs
 topdogphoto
-dog_features
+weeklyfluff
