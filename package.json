@@ -8,7 +8,9 @@
     "build": "env LC_COLLATE=C sort tags.txt -i -u -o tags.txt",
     "fixup": "npm run build; git add tags.txt; git c -m 'autofix'; git push",
     "diff-check": "git diff --exit-code",
-    "test": "npm run build && npm run diff-check"
+    "test": "npm run build; npm run auto-pr",
+    "auto-pr": "node auto_pr.js",
+    "test:check" : "npm run test ; npm run diff-check"
   },
   "repository": {
     "type": "git",
