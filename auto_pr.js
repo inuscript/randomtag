@@ -6,4 +6,7 @@ const CIRCLE_ARTIFACTS = process.env.CIRCLE_ARTIFACTS
 
 console.log(GITHUB_ACCESS_TOKEN, CIRCLE_PROJECT_USERNAME, CIRCLE_PROJECT_REPONAME , CIRCLE_BUILD_NUM, CIRCLE_ARTIFACTS)
 
-COV_URL="https://circle-artifacts.com/gh/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/$CIRCLE_BUILD_NUM/artifacts/0$CIRCLE_ARTIFACTS/coverage/index.html"
+const url=`https://circle-artifacts.com/gh/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/${CIRCLE_BUILD_NUM}/artifacts/0${CIRCLE_ARTIFACTS}/tags.txt`
+console.log(url)
+
+// https://circle-artifacts.com/gh/inuscript/randomtag/22/artifacts/0/home/ubuntu/randomtag/tags.txt
