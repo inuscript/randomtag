@@ -5,6 +5,7 @@ const CIRCLE_ARTIFACTS = process.env.CIRCLE_ARTIFACTS
 const CIRCLE_BUILD_NUM = process.env.CIRCLE_BUILD_NUM 
 const CIRCLE_BRANCH = process.env.CIRCLE_BRANCH
 
+return // suspend
 if(CIRCLE_BRANCH !== "gh-pages"){
   return // exit
 }
