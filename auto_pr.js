@@ -10,4 +10,7 @@ const url = `${BASE_URL}/gh/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME
 
 console.log(url)
 
+const items = fs.readFileSync(CIRCLE_ARTIFACTS)
+console.log(items)
+
 // https://circle-artifacts.com/gh/inuscript/randomtag/22/artifacts/0/home/ubuntu/randomtag/tags.txt
