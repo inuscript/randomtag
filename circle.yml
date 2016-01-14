@@ -7,3 +7,6 @@ test:
 general:
   artifacts:
     - tags.txt
+  branches:
+    ignore:
+      - auto-pr-.*
