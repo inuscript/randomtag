@@ -3,8 +3,7 @@ machine:
     version: 5.1.0
 test:
   post:
-    commands:
-      - npm run auto-pr
+    - npm run auto-pr
 general:
   artifacts:
     - tags.txt
