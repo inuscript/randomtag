@@ -25,16 +25,20 @@ const files = targetFiles.map( (file) => {
 var client = github({version: 3, auth: token})
 
 client.branch(user, repo, fromBranch, branchName, (err, res) => {
+  console.log(`create branch ${fromBranch} => ${branchName}`)
   var option = {
     branch: branchName,
     message: "auto build",
     updates: files
   }
   client.commit(user, repo, option, (err, res) => {
+    console.log(`commit`)
     client.pull(
       { repo: repo, user: user, branch: branchName},
       { repo: repo, user: user, branch: fromBranch},
       { title: "Auto Build" }
-    )
+    , (err, res) => {
+      console.log(res)
+    })
   })
 })
