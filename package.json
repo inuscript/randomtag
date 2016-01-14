@@ -10,7 +10,7 @@
     "diff-check": "git diff --exit-code",
     "test": "npm run build; npm run auto-pr",
     "auto-pr": "node auto_pr.js",
-    "test:check" : "npm run test ; npm run diff-check"
+    "test:check": "npm run test ; npm run diff-check"
   },
   "repository": {
     "type": "git",
@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/inuscript/randomtag/issues"
   },
-  "homepage": "https://github.com/inuscript/randomtag#readme"
+  "homepage": "https://github.com/inuscript/randomtag#readme",
+  "devDependencies": {
+    "github-basic": "^6.0.0"
+  }
 }
