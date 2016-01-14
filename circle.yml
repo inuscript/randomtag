@@ -2,7 +2,7 @@ machine:
   node:
     version: 5.1.0
 deployment:
-  post:
+  override:
     - npm run auto-pr
 general:
   artifacts:
