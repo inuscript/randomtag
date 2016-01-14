@@ -5,7 +5,7 @@ const CIRCLE_ARTIFACTS = process.env.CIRCLE_ARTIFACTS
 const CIRCLE_BUILD_NUM = process.env.CIRCLE_BUILD_NUM 
 
 const targetFiles = [
-  "tags.txt"
+  "./tags.txt"
 ]
 
 var user = "inuscript"
@@ -17,7 +17,8 @@ var fromBranch = "gh-pages"
 const files = targetFiles.map( (file) => {
   return {
     path: file,
-    content: fs.readFileSync(`${CIRCLE_ARTIFACTS}/${file}`, 'utf-8'),
+    // content: fs.readFileSync(`${CIRCLE_ARTIFACTS}/${file}`, 'utf-8'),
+    content: fs.readFileSync(`${file}`, 'utf-8'),
   }
 })
 
