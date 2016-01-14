@@ -5,7 +5,7 @@ const CIRCLE_ARTIFACTS = process.env.CIRCLE_ARTIFACTS
 const CIRCLE_BUILD_NUM = process.env.CIRCLE_BUILD_NUM 
 
 const targetFiles = [
-  "./tags.txt"
+  "tags.txt"
 ]
 
 var user = "inuscript"
@@ -13,6 +13,7 @@ var repo = "randomtag"
 var token = GITHUB_ACCESS_TOKEN
 var branchName = `auto-pr-${CIRCLE_BUILD_NUM}`
 var fromBranch = "gh-pages"
+
 // load file
 const files = targetFiles.map( (file) => {
   return {
@@ -25,20 +26,18 @@ const files = targetFiles.map( (file) => {
 var client = github({version: 3, auth: token})
 
 client.branch(user, repo, fromBranch, branchName, (err, res) => {
-  console.log(`create branch ${fromBranch} => ${branchName}`)
   var option = {
     branch: branchName,
     message: "auto build",
     updates: files
   }
-  client.commit(user, repo, option, (err, res) => {
-    console.log(`commit`)
-    client.pull(
+  client.commit(user, repo, option).then( (res) => {
+    return client.pull(
       { repo: repo, user: user, branch: branchName},
       { repo: repo, user: user, branch: fromBranch},
       { title: "Auto Build" }
-    , (err, res) => {
-      console.log(res)
-    })
+    )
+  }).done( (res) => {
+    console.log(res)
   })
 })
