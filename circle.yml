@@ -1,8 +1,8 @@
 machine:
   node:
     version: 5.1.0
-deployment:
-  autopr:
+test:
+  post:
     commands:
       - npm run auto-pr
 general:
