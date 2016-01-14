@@ -2,7 +2,8 @@ machine:
   node:
     version: 5.1.0
 deployment:
-  - npm run auto-pr
+  post:
+    - npm run auto-pr
 general:
   artifacts:
     - tags.txt
