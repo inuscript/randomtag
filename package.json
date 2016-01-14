@@ -9,7 +9,7 @@
     "fixup": "npm run build; git add tags.txt; git c -m 'autofix'; git push",
     "diff-check": "git diff --exit-code",
     "test": "npm run build",
-    "auto-pr": "node auto_pr.js",
+    "auto-pr": "node auto-pr.js",
     "test:check": "npm run test ; npm run diff-check"
   },
   "repository": {
