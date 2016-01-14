@@ -41,6 +41,7 @@ love
 lovedogs
 lovepuppies
 nature
+norfolkterriers
 pet
 petbox
 pets
@@ -64,4 +65,3 @@ terrierstagram
 topdogphoto
 weeklyfluff
 woof_tastic
-norfolkterriers
