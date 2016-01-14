@@ -40,7 +40,7 @@ client.branch(user, repo, fromBranch, branchName, (err, res) => {
     return client.pull(
       { repo: repo, user: user, branch: branchName},
       { repo: repo, user: user, branch: fromBranch},
-      { title: "Auto Build" }
+      { title: `Auto Build ${CIRCLE_BUILD_NUM}` }
     )
   }).done( (res) => {
     console.log(res)
