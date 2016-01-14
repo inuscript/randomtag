@@ -1,3 +1,4 @@
+return
 const fs = require("fs")
 const github = require("github-basic")
 const GITHUB_ACCESS_TOKEN = process.env.GITHUB_ACCESS_TOKEN
