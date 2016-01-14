@@ -9,4 +9,4 @@ general:
     - tags.txt
   branches:
     ignore:
-      - auto-pr-.*
+      - /auto-pr-.*/
