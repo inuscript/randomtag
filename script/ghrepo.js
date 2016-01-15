@@ -95,16 +95,16 @@ GhRepoBranch.prototype.createBranch = function(branchName){
 
 // pr
 GhRepoBranch.prototype.pullRequest = function(toBranchName, files, title) {
-  return this.createBranch()
+  return this.createBranch(toBranchName)
     .then(() => {
-      return this.client.commit(user, repo, {
+      return this.client.commit(this.user, this.repo, {
         branch: toBranchName,
         message: title,
         updates: files
       })
     })
     .then( (res) => {
-      return client.pull(
+      return this.client.pull(
         { repo: this.repo, user: this.user, branch: toBranchName},
         { repo: this.repo, user: this.user, branch: this.branch},
         { title: title }
