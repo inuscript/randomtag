@@ -25,17 +25,16 @@ GhRepoBranch.prototype.searchRefSha = function(name) {
   })
 }
 
-
-GhRepoBranch.prototype.touchBranch = function(toBranch) {
-  return new Promise((resolve, reject) => {
-    this.searchRefSha(toBranch).then((sha) => {
-      if(isExist){
-        return resolve(sha)
-      }
-      return this.client.branch(this.user, this.repo, this.branch, toBranch)
-    })
-  })
-}
+// GhRepoBranch.prototype.touchBranch = function(toBranch) {
+//   return new Promise((resolve, reject) => {
+//     this.searchRefSha(toBranch).then((sha) => {
+//       if(isExist){
+//         return resolve(sha)
+//       }
+//       return this.client.branch(this.user, this.repo, this.branch, toBranch)
+//     })
+//   })
+// }
 // diff
 GhRepoBranch.prototype.treeSha = function(){
   var pathBase = this.gitApiBase()
@@ -85,24 +84,32 @@ GhRepoBranch.prototype.filterDiffFiles = function(files){
     return filterd
   })
 }
+
+GhRepoBranch.prototype.createBranch = function(branchName){
+  return this.client.branch(this.user, this.repo, this.branch, branchName)
+    .catch((e) => {
+      var err = e.statusCode === 422 ? "Exist branch" : e
+      return Promise.reject(err)
+    })
+}
+
 // pr
 GhRepoBranch.prototype.pullRequest = function(toBranchName, files, title) {
-  return this.touchBranch(toBranchName)
-  .then(() => {
-    var option = {
-      branch: branchName,
-      message: title,
-      updates: files
-    }
-    return client.commit(user, repo, option)
-  })
-  .then( (res) => {
-    return client.pull(
-      { repo: this.repo, user: this.user, branch: branchName},
-      { repo: this.repo, user: this.user, branch: fromBranch},
-      { title: title }
-    )
-  })
+  return this.createBranch()
+    .then(() => {
+      return this.client.commit(user, repo, {
+        branch: toBranchName,
+        message: title,
+        updates: files
+      })
+    })
+    .then( (res) => {
+      return client.pull(
+        { repo: this.repo, user: this.user, branch: toBranchName},
+        { repo: this.repo, user: this.user, branch: this.branch},
+        { title: title }
+      )
+    })
 }
 
 module.exports.GhRepoBranch = GhRepoBranch

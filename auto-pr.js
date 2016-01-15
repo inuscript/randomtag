@@ -37,7 +37,8 @@ function sendPRIfNeed(pr, files, toBranch){
   }).then( (files) => {
     console.log("Send pull request")
     return pr.pullRequest( toBranch, files, `Auto build ${CIRCLE_BUILD_NUM}`)
-  }).then( (e) => {
+  }).then( (res) => {
+    console.log(res)
   }).catch( (e) => {
     console.log(e)
   })
