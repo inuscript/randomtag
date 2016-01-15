@@ -25,22 +25,22 @@ GhRepoBranch.prototype.searchRefSha = function(name) {
   })
 }
 
+
 GhRepoBranch.prototype.touchBranch = function(toBranch) {
   return new Promise((resolve, reject) => {
     this.searchRefSha(toBranch).then((sha) => {
-      if(isExist) return resolve(sha)
-      this.client.branch(this.user, this.repo, this.branch, toBranch, (err, res) => {
-        return resolve(res)
-      })
+      if(isExist){
+        return resolve(sha)
+      }
+      return this.client.branch(this.user, this.repo, this.branch, toBranch)
     })
   })
 }
 // diff
 GhRepoBranch.prototype.treeSha = function(){
-  var branch = this.branch
   var pathBase = this.gitApiBase()
   var client = this.client
-  return client.get(`${pathBase}/refs/heads/${branch}`).then((res) => {
+  return client.get(`${pathBase}/refs/heads/${this.branch}`).then((res) => {
     return client.get(`${pathBase}/commits/${res.object.sha}`)
   }).then((res) => {
     return client.get(`${pathBase}/trees/${res.tree.sha}`)
@@ -86,13 +86,12 @@ GhRepoBranch.prototype.filterDiffFiles = function(files){
   })
 }
 // pr
-GhRepoBranch.prototype.pullRequest = function(fromBranch, toBranch, files) {
-  var title = message =  `Auto build ${CIRCLE_BUILD_NUM}`
-  return this.touchBranch(fromBranch, toBranch)
+GhRepoBranch.prototype.pullRequest = function(toBranchName, files, title) {
+  return this.touchBranch(toBranchName)
   .then(() => {
     var option = {
       branch: branchName,
-      message: message,
+      message: title,
       updates: files
     }
     return client.commit(user, repo, option)
