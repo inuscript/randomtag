@@ -48,6 +48,5 @@ function sendPRIfNeed(pr, files, toBranch){
 
 var client = github({version: 3, auth: token})
 
-
 var pr = new GhRepoBranch(client, user, repo, fromBranch)
 sendPRIfNeed(pr, files, toBranch)
