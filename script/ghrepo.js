@@ -25,17 +25,6 @@ GhRepoBranch.prototype.searchRefSha = function(name) {
   })
 }
 
-// GhRepoBranch.prototype.touchBranch = function(toBranch) {
-//   return new Promise((resolve, reject) => {
-//     this.searchRefSha(toBranch).then((sha) => {
-//       if(isExist){
-//         return resolve(sha)
-//       }
-//       return this.client.branch(this.user, this.repo, this.branch, toBranch)
-//     })
-//   })
-// }
-// diff
 GhRepoBranch.prototype.treeSha = function(){
   var pathBase = this.gitApiBase()
   var client = this.client
