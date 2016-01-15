@@ -1,44 +1,45 @@
 const github = require("github-basic")
 
-var GhRepo = function(user, repo, token){
+var GhRepoBranch = function(client, user, repo, branch){
+  this.client = client
   this.user = user
   this.repo = repo
-  this.client = github({version: 3, auth: token})
+  this.branch = branch
 }
 
-GhRepo.prototype.gitApiBase = () => {
-  return `/repos/${user}/${repo}/git`
+GhRepoBranch.prototype.gitApiBase = function() {
+  return `/repos/${this.user}/${this.repo}/git`
 }
 
-GhRepo.prototype.refHeads = () => {
-  return this.client.get(`${this.gitApiBase()}/refs/heads`)
+GhRepoBranch.prototype.refHeads = function(){
+  var url = `${this.gitApiBase()}/refs/heads`
+  return this.client.get(url)
 }
 
-GhRepo.prototype.searchRefSha = (name) => {
+GhRepoBranch.prototype.searchRefSha = function(name) {
   return this.refHeads().then((heads) => {
     var head = heads.find((head) => {
-      return heads.ref === name
-    })
+      return heads.ref === `refs/heads/${name}`
+    })    
     return head ? head.object.sha : undefined
   })
 }
 
-GhRepo.prototype.touchBranch = (fromBranch, toBranch) => {
-  var fromBranch = fromBranch || "master"
-
+GhRepoBranch.prototype.touchBranch = function(toBranch) {
   return new Promise((resolve, reject) => {
     this.searchRefSha(toBranch).then((sha) => {
       if(isExist) return resolve(sha)
-      this.client.branch(this.user, this.repo, fromBranch, toBranch, (err, res) => {
-        console.log(res)
+      this.client.branch(this.user, this.repo, this.branch, toBranch, (err, res) => {
         return resolve(res)
       })
     })
   })
 }
-
-GhRepo.prototype.treeSha = function(branch){
+// diff
+GhRepoBranch.prototype.treeSha = function(){
+  var branch = this.branch
   var pathBase = this.gitApiBase()
+  var client = this.client
   return client.get(`${pathBase}/refs/heads/${branch}`).then((res) => {
     return client.get(`${pathBase}/commits/${res.object.sha}`)
   }).then((res) => {
@@ -48,12 +49,44 @@ GhRepo.prototype.treeSha = function(branch){
       prev[curr.path] = curr.sha
       return prev
     }, {})
-  }).catch((err) => {
-    console.log(err)
   })
 }
 
-GhRepo.prototype.pullRequest = (fromBranch, toBranch) => {
+GhRepoBranch.prototype.blobContent = function(sha){
+  return this.client.get(`${this.gitApiBase()}/blobs/${sha}`)
+    .then((blob) => {
+      return new Buffer(blob.content, blob.encoding).toString()
+    })
+}
+
+// files -> blobs
+GhRepoBranch.prototype.blobFiles = function(files){
+  return this.treeSha().then((treeSha) => {
+    return files.map( (file) => {
+      return this.blobContent( treeSha[file.path] )
+      .then((content) => {
+        return { file: file, blobContent: content }
+      })
+    })
+  }).then((promises) => {
+    return Promise.all(promises)
+  })
+}
+
+GhRepoBranch.prototype.filterDiffFiles = function(files){
+  var pathBase = this.gitApiBase()
+  var client = this.client
+  return this.blobFiles(files).then((values) => {
+    var filterd = values.filter((val) => {
+      return val.file.content !== val.blobContent
+    }).map((item) => {
+      return item.file
+    })
+    return filterd
+  })
+}
+// pr
+GhRepoBranch.prototype.pullRequest = function(fromBranch, toBranch, files) {
   var title = message =  `Auto build ${CIRCLE_BUILD_NUM}`
   return this.touchBranch(fromBranch, toBranch)
   .then(() => {
@@ -73,4 +106,4 @@ GhRepo.prototype.pullRequest = (fromBranch, toBranch) => {
   })
 }
 
-module.exports.GhRepo = GhRepo
+module.exports.GhRepoBranch = GhRepoBranch
