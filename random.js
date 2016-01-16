@@ -8,8 +8,7 @@
     return arr
   }
   var tagLen = function(){ // min = 11 max = 30
-    var maxRandTag =  (30 - masterTags.length) - 11 
-    return 11 + Math.random() * maxRandTag
+    return 25
   }
   var getSuffled = function(randomTags){
     var rand = shuffle(randomTags).slice(0, tagLen())
@@ -46,6 +45,5 @@
     start()
     // Clipboard.js
     new Clipboard('.btn');
-
   })
 })(jQuery)
