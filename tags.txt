@@ -65,3 +65,6 @@ terrierstagram
 topdogphoto
 weeklyfluff
 woof_tastic
+dailyfluff
+petscorner
+petsofig
