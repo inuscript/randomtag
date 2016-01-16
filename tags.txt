@@ -10,6 +10,7 @@ cute
 cutedog
 cutie
 dailydog
+dailyfluff
 dog_features
 doggie
 doggy
@@ -47,6 +48,8 @@ petbox
 pets
 pets_of_instagram
 petsagram
+petscorner
+petsofig
 petsofinstagram
 petstagram
 photooftheday
