@@ -1,5 +1,5 @@
 const fs = require("fs")
-const GhRepoBranch = require("./script/ghrepo").GhRepoBranch
+const GhRepoBranch = require("./ghrepo").GhRepoBranch
 const GITHUB_ACCESS_TOKEN = process.env.GITHUB_ACCESS_TOKEN
 const CIRCLE_ARTIFACTS = process.env.CIRCLE_ARTIFACTS 
 const CIRCLE_BUILD_NUM = process.env.CIRCLE_BUILD_NUM 
