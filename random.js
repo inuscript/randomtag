@@ -33,17 +33,15 @@
     })
   }
   var start = function(){
-    loadTags(function(randomTags){
-      var selectedTags = getSuffled(randomTags)
-      var tags = masterTags.concat(selectedTags)
-
-      $("#tags").text(arrToTagStr(tags))
-    })
+    // loadTags(function(randomTags){
+    //   var selectedTags = getSuffled(randomTags)
+    //   var tags = masterTags.concat(selectedTags)
+    // 
+    //   $("#tags").text(arrToTagStr(tags))
+    // })
   }
   //
   $(function(){
     start()
-    // Clipboard.js
-    new Clipboard('.btn');
   })
 })(jQuery)

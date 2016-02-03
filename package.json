@@ -53,6 +53,7 @@
   },
   "dependencies": {
     "axios": "^0.9.1",
+    "chance": "^0.8.0",
     "clipboard": "^1.5.5",
     "doc-ready": "^1.0.3",
     "vidom": "^0.1.3"
