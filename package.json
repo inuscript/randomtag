@@ -27,7 +27,7 @@
   },
   "babel": {
     "presets": [
-      "es2015-rollup"
+      "es2015"
     ]
   },
   "homepage": "https://github.com/inuscript/randomtag#readme",
@@ -40,7 +40,10 @@
     "rollup-plugin-npm": "^1.4.0"
   },
   "dependencies": {
+    "babel-preset-es2015": "^6.3.13",
+    "browserify": "^13.0.0",
     "clipboard": "^1.5.5",
-    "vidom": "^0.1.3"
+    "vidom": "^0.1.3",
+    "watchify": "^3.7.0"
   }
 }
