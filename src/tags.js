@@ -13,7 +13,7 @@ export default function(num = 25){
       return tag.length > 0
     })
   }).then(tags => {
-    return shuffle(tags).slice(num)
+    return shuffle(tags).splice(0, num)
   }).then(tags => {
     return primaryTag.concat(tags)
   })
