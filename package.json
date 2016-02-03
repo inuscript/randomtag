@@ -5,9 +5,10 @@
   "main": "random.js",
   "scripts": {
     "start": "static .",
-    "build": "build:script ; build:tag",
+    "build": "npm run build:script ; npm run build:tag",
     "build:tag": "env LC_COLLATE=C sort tags.txt -i -u -o tags.txt",
-    "build:script": "rollup -c",
+    "build:script": "browserify -e src/index.js -o dist/index.js",
+    "build:script:rollup": "rollup -c",
     "fixup": "npm run build; git add tags.txt; git c -m 'autofix'; git push",
     "diff-check": "git diff --exit-code",
     "test": "npm run build",
@@ -25,13 +26,21 @@
     "url": "https://github.com/inuscript/randomtag/issues"
   },
   "babel": {
-    "presets": ["es2015-rollup"]
+    "presets": [
+      "es2015-rollup"
+    ]
   },
   "homepage": "https://github.com/inuscript/randomtag#readme",
   "devDependencies": {
     "babel-preset-es2015-rollup": "^1.1.1",
     "github-basic": "^6.0.0",
     "rollup": "^0.25.2",
-    "rollup-plugin-babel": "^2.3.9"
+    "rollup-plugin-babel": "^2.3.9",
+    "rollup-plugin-commonjs": "^2.2.1",
+    "rollup-plugin-npm": "^1.4.0"
+  },
+  "dependencies": {
+    "clipboard": "^1.5.5",
+    "vidom": "^0.1.3"
   }
 }
