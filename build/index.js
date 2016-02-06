@@ -9347,6 +9347,7 @@ function normalized(media) {
 
 function bandit(tags, media) {
   console.log("use bandit");
+
   var n = normalized(media);
 
   var b = new _toZok.UCBBandit(tags);
@@ -9418,9 +9419,10 @@ exports.default = function () {
   var str = new _firebase2.default();
   return str.media().then(function (_m) {
     var media = _m.sort(function (a, b) {
-      return a.time > b.time;
+      return a.time < b.time;
     });
-    media.pop(); // 最新のデータは取らない
+    // media.unshift() // 最新のデータは取らない
+    console.log(media);
     return media;
   }).then(function (media) {
     return (0, _dogtag2.default)().then(function (tags) {

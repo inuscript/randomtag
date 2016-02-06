@@ -28,6 +28,7 @@ function normalized(media){
 
 export default function bandit(tags, media){
   console.log("use bandit")
+
   let n = normalized(media)
 
   let b = new UCBBandit( tags )
