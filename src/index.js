@@ -1,13 +1,12 @@
 import Clipboard from "clipboard"
 import { node , Component, mountToDom } from 'vidom/lib/vidom';
 import docReady from "doc-ready"
-import tags from "./tags"
+import tags from "./bandit/index"
 
 class CopyButton extends Component{
   onRender({target}){
     let id = "__copy__button__"
     this.clipboard = new Clipboard(`#${id}`)
-
     return node("button")
       .attrs({
         "id": id,
