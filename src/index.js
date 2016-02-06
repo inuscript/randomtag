@@ -2,6 +2,7 @@ import Clipboard from "clipboard"
 import { node , Component, mountToDom } from 'vidom/lib/vidom';
 import docReady from "doc-ready"
 import tags from "./tags"
+
 class CopyButton extends Component{
   onRender({target}){
     let id = "__copy__button__"
