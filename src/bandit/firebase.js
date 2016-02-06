@@ -4,11 +4,12 @@ export default class {
   constructor(){
     this.ref = new Firebase("http://thridsta.firebaseio.com")
   }
-  media(){
-    let mediaRef = this.ref.child("media").orderByChild("time").limitToLast(40)
+  media(num = 60){
+    let mediaRef = this.ref.child("media").orderByChild("time").limitToLast(num)
     return new Promise( (resolve, reject) => {
       mediaRef.once("value", (snap) => {
-        resolve(Object.values(snap.val()))
+        let items = Object.values(snap.val())
+        resolve(items)
       })
     })
   }

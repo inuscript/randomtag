@@ -1,7 +1,8 @@
+import "babel-polyfill"
 import Clipboard from "clipboard"
 import { node , Component, mountToDom } from 'vidom/lib/vidom';
 import docReady from "doc-ready"
-import tags from "./bandit/index"
+import calcTags from "./bandit/index"
 
 class CopyButton extends Component{
   onRender({target}){
@@ -45,7 +46,7 @@ class App extends Component{
 
 docReady( function(){
   let container = document.getElementById('container')
-  let ts = tags().then(tags => {
+  let ts = calcTags().then(tags => {
     mountToDom(container, node(App).attrs({tags: tags}));
   })
 })

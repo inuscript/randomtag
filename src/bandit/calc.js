@@ -1,4 +1,4 @@
-import {UCBBandit} from "@inuscript/to-zok"
+import { UCBBandit } from "@inuscript/to-zok"
 
 function tagLikes(media){
   let tags = {}
@@ -12,11 +12,11 @@ function tagLikes(media){
   return tags
 }
 
-function normalized(sample){
-  let likes = media.map( (m) => media.like)
+function normalized(media){
+  let likes = media.map( (m) => m.like)
   let max = Math.max.apply(null, likes)
   let min = Math.min.apply(null, likes)
-  let tl = tagLikes(sample)
+  let tl = tagLikes(media)
   return Object.entries(tl).map( ([tag, counts]) => {
     let norm = counts.map( (c) => (c - min) / (max - min))
     return {
@@ -28,6 +28,7 @@ function normalized(sample){
 
 export default function bandit(tags, media){
   let n = normalized(media)
+
   let b = new UCBBandit( tags )
   n.forEach( ({tag, count}) => {
     count.forEach( c => b.reward(tag, c))
