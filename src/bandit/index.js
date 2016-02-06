@@ -7,7 +7,7 @@ export default function(num = 25){
   let str = new Storage()
   return str.media().then( _m => {
     let media = _m.sort( (a, b) => a.time > b.time)
-    media.pop()
+    media.pop() // 最新のデータは取らない
     return media
   }).then( media => {
     return masterTag().then( tags => {
