@@ -1,5 +1,5 @@
 import Storage from "./firebase"
-import masterTag from "../lib/tags"
+import masterTag from "@inuscript/dogtag"
 import calcBandit from "./calc"
 import primaryTag from "../lib/primary"
 

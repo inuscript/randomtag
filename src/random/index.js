@@ -1,7 +1,7 @@
 import axios from "axios"
 import Chance from "chance"
 // import bandit from "./bandit"
-import tags from "../lib/tags"
+import tags from "@inuscript/dogtag"
 import primaryTag from "../lib/primary"
 function shuffle(tags){
   let chance = new Chance()
