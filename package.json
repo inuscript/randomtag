@@ -46,6 +46,7 @@
     "@inuscript/dogtag": "^1.0.0",
     "@inuscript/to-zok": "^0.2.1",
     "axios": "^0.9.1",
+    "babel-polyfill": "^6.5.0",
     "chance": "^0.8.0",
     "clipboard": "^1.5.5",
     "doc-ready": "^1.0.3",
