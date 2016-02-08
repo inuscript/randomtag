@@ -1,15 +1,14 @@
 import { UCBBandit } from "@inuscript/to-zok"
 
 function tagLikes(media){
-  let tags = {}
-  media.map( (m) => {
+  return media.reduce( (tags, m) => {
     m.tags.map( (tag) => {
       let t = tags[tag] || []
       t.push(m.like)
       tags[tag] = t
     })
-  })
-  return tags
+    return tags
+  }, {})
 }
 
 function normalized(media){
@@ -27,7 +26,6 @@ function normalized(media){
 }
 
 export default function bandit(tags, media){
-  console.log("use bandit")
 
   let n = normalized(media)
 

@@ -1,14 +1,12 @@
 import Storage from "./firebase"
-import masterTag from "@inuscript/dogtag"
+import masterTag, { primary as primaryTag } from "@inuscript/dogtag"
 import calcBandit from "./calc"
-import primaryTag from "../lib/primary"
 
 export default function(num = 25){
+  console.debug("use bandit logic")
   let str = new Storage()
   return str.media().then( _m => {
     let media = _m.sort( (a, b) => a.time < b.time)
-    // media.unshift() // 最新のデータは取らない
-    console.log(media)
     return media
   }).then( media => {
     return masterTag().then( tags => {

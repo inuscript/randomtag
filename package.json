@@ -43,7 +43,7 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
-    "@inuscript/dogtag": "^1.0.0",
+    "@inuscript/dogtag": "^1.1.0",
     "@inuscript/to-zok": "^0.2.1",
     "axios": "^0.9.1",
     "babel-polyfill": "^6.5.0",
