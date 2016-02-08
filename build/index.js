@@ -11,6 +11,8 @@ module.exports = function tags(){
   })
 }
 
+module.exports.primary = [ "dog", "norfolkterrier" ]
+
 },{"axios":3}],2:[function(require,module,exports){
 "use strict"
 class Arm{
@@ -61,18 +63,30 @@ class UCBBandit{
   calcValues(){
     return this.arms.map( (arm) => {
       return {
-        label: arm.label,
+        arm: arm,
         ucb: arm.calcUCB(this.n) 
       }
     })
   }
   calc(){
     let valuesUCB = this.calcValues()
-    return valuesUCB.concat().sort((a, b) => a.ucb < b.ucb)
+    return valuesUCB.concat().sort((a, b) => b.ucb - a.ucb)
   }
   select(){
     return this.calc().map( (v) => {
-      return v.label
+      return v.arm.label
+    })
+  }
+  serialize(){
+    return this.calc().map( (val) => {
+      let arm = val.arm
+      let ucb = val.ucb
+      return {
+        label: arm.label,
+        count: arm.count,
+        expectation: arm.expectation,
+        ucb: ucb
+      }
     })
   }
 }
@@ -9301,8 +9315,6 @@ exports.Component = _Component2.default;
 },{"./Component":222,"./client/mounter":230,"./createComponent":238,"./createNode":239,"./renderToString":243,"./utils/console":244,"./utils/normalizeChildren":251,"_process":219}],253:[function(require,module,exports){
 "use strict";
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -9310,132 +9322,51 @@ exports.default = bandit;
 
 var _toZok = require("@inuscript/to-zok");
 
-function tagLikes(media) {
-  var tags = {};
-  media.map(function (m) {
-    m.tags.map(function (tag) {
-      var t = tags[tag] || [];
-      t.push(m.like);
-      tags[tag] = t;
-    });
-  });
-  return tags;
-}
+var _tags = require("../storage/tags");
 
-function normalized(media) {
-  var likes = media.map(function (m) {
-    return m.like;
-  });
-  var max = Math.max.apply(null, likes);
-  var min = Math.min.apply(null, likes);
-  var tl = tagLikes(media);
-  return Object.entries(tl).map(function (_ref) {
-    var _ref2 = _slicedToArray(_ref, 2);
-
-    var tag = _ref2[0];
-    var counts = _ref2[1];
-
-    var norm = counts.map(function (c) {
-      return (c - min) / (max - min);
-    });
-    return {
-      tag: tag,
-      count: norm
-    };
-  });
-}
-
-function bandit(tags, media) {
-  console.log("use bandit");
-
-  var n = normalized(media);
-
-  var b = new _toZok.UCBBandit(tags);
-  n.forEach(function (_ref3) {
-    var tag = _ref3.tag;
-    var count = _ref3.count;
-
-    count.forEach(function (c) {
-      return b.reward(tag, c);
-    });
-  });
-  return b.select();
-}
-
-},{"@inuscript/to-zok":2}],254:[function(require,module,exports){
-"use strict";
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _firebase = require("firebase");
-
-var _firebase2 = _interopRequireDefault(_firebase);
+var _tags2 = _interopRequireDefault(_tags);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function bandit(tags, media) {
+  var n = (0, _tags2.default)(media);
+  var bandit = new _toZok.UCBBandit(tags);
+  n.forEach(function (_ref) {
+    var tag = _ref.tag;
+    var count = _ref.count;
 
-var _class = function () {
-  function _class() {
-    _classCallCheck(this, _class);
+    count.forEach(function (c) {
+      bandit.reward(tag, c);
+    });
+  });
+  return bandit;
+}
 
-    this.ref = new _firebase2.default("http://thridsta.firebaseio.com");
-  }
-
-  _createClass(_class, [{
-    key: "media",
-    value: function media() {
-      var num = arguments.length <= 0 || arguments[0] === undefined ? 60 : arguments[0];
-
-      var mediaRef = this.ref.child("media").orderByChild("time").limitToLast(num);
-      return new Promise(function (resolve, reject) {
-        mediaRef.once("value", function (snap) {
-          var items = Object.values(snap.val());
-          resolve(items);
-        });
-      });
-    }
-  }]);
-
-  return _class;
-}();
-
-exports.default = _class;
-
-},{"firebase":215}],255:[function(require,module,exports){
+},{"../storage/tags":257,"@inuscript/to-zok":2}],254:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.bandit = bandit;
 
 exports.default = function () {
   var num = arguments.length <= 0 || arguments[0] === undefined ? 25 : arguments[0];
 
-  var str = new _firebase2.default();
-  return str.media().then(function (_m) {
-    var media = _m.sort(function (a, b) {
-      return a.time < b.time;
+  console.debug("use bandit logic");
+  return bandit().then(function (bandit) {
+    var result = bandit.serialize();
+    var tags = result.concat().splice(0, num).map(function (v) {
+      return v.label;
     });
-    // media.unshift() // 最新のデータは取らない
-    console.log(media);
-    return media;
-  }).then(function (media) {
-    return (0, _dogtag2.default)().then(function (tags) {
-      return (0, _calc2.default)(tags, media);
-    });
-  }).then(function (tag) {
-    return tag.splice(0, num);
-  }).then(function (tag) {
-    return _primary2.default.concat(tag);
+    return {
+      tags: _dogtag.primary.concat(tags),
+      stats: result
+    };
   });
 };
 
-var _firebase = require("./firebase");
+var _firebase = require("../storage/firebase");
 
 var _firebase2 = _interopRequireDefault(_firebase);
 
@@ -9447,13 +9378,23 @@ var _calc = require("./calc");
 
 var _calc2 = _interopRequireDefault(_calc);
 
-var _primary = require("../lib/primary");
-
-var _primary2 = _interopRequireDefault(_primary);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"../lib/primary":257,"./calc":253,"./firebase":254,"@inuscript/dogtag":1}],256:[function(require,module,exports){
+function bandit() {
+  var str = new _firebase2.default();
+  return str.media().then(function (_m) {
+    var media = _m.sort(function (a, b) {
+      return a.time < b.time;
+    });
+    return media;
+  }).then(function (media) {
+    return (0, _dogtag2.default)().then(function (tags) {
+      return (0, _calc2.default)(tags, media);
+    });
+  });
+}
+
+},{"../storage/firebase":256,"./calc":253,"@inuscript/dogtag":1}],255:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -9553,8 +9494,80 @@ var Tags = function (_Component3) {
   return Tags;
 }(_vidom.Component);
 
-var App = function (_Component4) {
-  _inherits(App, _Component4);
+var Links = function (_Component4) {
+  _inherits(Links, _Component4);
+
+  function Links() {
+    _classCallCheck(this, Links);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Links).apply(this, arguments));
+  }
+
+  _createClass(Links, [{
+    key: "onRender",
+    value: function onRender() {
+      var base = "https://github.com/inuscript/dogtag";
+      var issue = base + "/issues/new?body=" + base + "/edit/gh-pages/tags.txt";
+      var edit = base + "/edit/master/tags.txt";
+      return (0, _vidom.node)("div").children([(0, _vidom.node)("a").attrs({ href: issue }).children("Issue"), (0, _vidom.node)("a").attrs({ href: edit }).children("Edit")]);
+    }
+  }]);
+
+  return Links;
+}(_vidom.Component);
+
+var Row = function (_Component5) {
+  _inherits(Row, _Component5);
+
+  function Row() {
+    _classCallCheck(this, Row);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Row).apply(this, arguments));
+  }
+
+  _createClass(Row, [{
+    key: "onRender",
+    value: function onRender(_ref4) {
+      var label = _ref4.label;
+      var count = _ref4.count;
+      var expectation = _ref4.expectation;
+      var ucb = _ref4.ucb;
+
+      var exp = Math.ceil(expectation * 100) / 100;
+      var u = Math.ceil(ucb * 100) / 100;
+      return (0, _vidom.node)("tr").children([(0, _vidom.node)("td").children(label), (0, _vidom.node)("td").children(count), (0, _vidom.node)("td").children(exp), (0, _vidom.node)("td").children(u)]);
+    }
+  }]);
+
+  return Row;
+}(_vidom.Component);
+
+var BanditStats = function (_Component6) {
+  _inherits(BanditStats, _Component6);
+
+  function BanditStats() {
+    _classCallCheck(this, BanditStats);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(BanditStats).apply(this, arguments));
+  }
+
+  _createClass(BanditStats, [{
+    key: "onRender",
+    value: function onRender(_ref5) {
+      var stats = _ref5.stats;
+
+      var rows = stats.map(function (st) {
+        return (0, _vidom.node)(Row).attrs(st);
+      });
+      return (0, _vidom.node)("table").attrs({ class: "badint-stats" }).children(rows);
+    }
+  }]);
+
+  return BanditStats;
+}(_vidom.Component);
+
+var App = function (_Component7) {
+  _inherits(App, _Component7);
 
   function App() {
     _classCallCheck(this, App);
@@ -9564,11 +9577,12 @@ var App = function (_Component4) {
 
   _createClass(App, [{
     key: "onRender",
-    value: function onRender(_ref4) {
-      var tags = _ref4.tags;
+    value: function onRender(_ref6) {
+      var tags = _ref6.tags;
+      var stats = _ref6.stats;
 
       var tagsId = "__tags";
-      return (0, _vidom.node)("div").children([(0, _vidom.node)(CopyButton).attrs({ target: "#" + tagsId }), (0, _vidom.node)(Tags).attrs({ tags: tags, id: tagsId })]);
+      return (0, _vidom.node)("div").children([(0, _vidom.node)(CopyButton).attrs({ target: "#" + tagsId }), (0, _vidom.node)(Tags).attrs({ tags: tags, id: tagsId }), (0, _vidom.node)(Links), (0, _vidom.node)(BanditStats).attrs({ stats: stats })]);
     }
   }]);
 
@@ -9577,17 +9591,102 @@ var App = function (_Component4) {
 
 (0, _docReady2.default)(function () {
   var container = document.getElementById('container');
-  var ts = (0, _index2.default)().then(function (tags) {
-    (0, _vidom.mountToDom)(container, (0, _vidom.node)(App).attrs({ tags: tags }));
+  var ts = (0, _index2.default)().then(function (_ref7) {
+    var tags = _ref7.tags;
+    var stats = _ref7.stats;
+
+    (0, _vidom.mountToDom)(container, (0, _vidom.node)(App).attrs({ tags: tags, stats: stats }));
+  }).catch(function (e) {
+    console.error(e);
   });
 });
 
-},{"./bandit/index":255,"babel-polyfill":20,"clipboard":23,"doc-ready":213,"vidom/lib/vidom":252}],257:[function(require,module,exports){
+},{"./bandit/index":254,"babel-polyfill":20,"clipboard":23,"doc-ready":213,"vidom/lib/vidom":252}],256:[function(require,module,exports){
 "use strict";
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = ["dog", "norfolkterrier"];
 
-},{}]},{},[256]);
+var _firebase = require("firebase");
+
+var _firebase2 = _interopRequireDefault(_firebase);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _class = function () {
+  function _class() {
+    _classCallCheck(this, _class);
+
+    this.ref = new _firebase2.default("http://thridsta.firebaseio.com");
+  }
+
+  _createClass(_class, [{
+    key: "media",
+    value: function media() {
+      var num = arguments.length <= 0 || arguments[0] === undefined ? 60 : arguments[0];
+
+      var mediaRef = this.ref.child("media").orderByChild("time").limitToLast(num);
+      return new Promise(function (resolve, reject) {
+        mediaRef.once("value", function (snap) {
+          var items = Object.values(snap.val());
+          resolve(items);
+        });
+      });
+    }
+  }]);
+
+  return _class;
+}();
+
+exports.default = _class;
+
+},{"firebase":215}],257:[function(require,module,exports){
+"use strict";
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = tagNormalized;
+
+function tagLikes(media) {
+  return media.reduce(function (tags, m) {
+    m.tags.map(function (tag) {
+      var t = tags[tag] || [];
+      t.push(m.like);
+      tags[tag] = t;
+    });
+    return tags;
+  }, {});
+}
+
+function tagNormalized(media) {
+  var likes = media.map(function (m) {
+    return m.like;
+  });
+  var max = Math.max.apply(null, likes);
+  var min = Math.min.apply(null, likes);
+  var tl = tagLikes(media);
+  return Object.entries(tl).map(function (_ref) {
+    var _ref2 = _slicedToArray(_ref, 2);
+
+    var tag = _ref2[0];
+    var counts = _ref2[1];
+
+    var norm = counts.map(function (c) {
+      return (c - min) / (max - min);
+    });
+    return {
+      tag: tag,
+      count: norm
+    };
+  });
+}
+
+},{}]},{},[255]);
