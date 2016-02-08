@@ -9628,7 +9628,7 @@ var _class = function () {
   _createClass(_class, [{
     key: "media",
     value: function media() {
-      var num = arguments.length <= 0 || arguments[0] === undefined ? 40 : arguments[0];
+      var num = arguments.length <= 0 || arguments[0] === undefined ? 30 : arguments[0];
 
       var mediaRef = this.ref.child("media").orderByChild("time").limitToLast(num);
       return new Promise(function (resolve, reject) {
