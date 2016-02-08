@@ -1,12 +1,3 @@
 machine:
   node:
     version: 5.1.0
-test:
-  post:
-    - npm run auto-pr
-general:
-  artifacts:
-    - tags.txt
-  branches:
-    ignore:
-      - /auto-pr-.*/
