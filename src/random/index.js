@@ -12,6 +12,6 @@ export default function(num = 25){
   return tags().then(tags => {
     return shuffle(tags).splice(0, num)
   }).then(tags => {
-    return primaryTag.concat(tags)
+    return {tags: primaryTag.concat(tags) }
   })
 }

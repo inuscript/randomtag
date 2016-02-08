@@ -33,20 +33,67 @@ class Tags extends Component{
       )
   }
 }
+class Links extends Component{
+  onRender(){
+    let base = "https://github.com/inuscript/dogtag"
+    let issue = `${base}/issues/new?body=${base}/edit/gh-pages/tags.txt`
+    let edit = `${base}/edit/master/tags.txt`
+    return node("div")
+      .children([
+        node("a").attrs({href: issue}).children("Issue"),
+        node("a").attrs({href: edit}).children("Edit")
+      ])
+  }
+}
+class Row extends Component{
+  onRender({name, count, expectation, ucb }){
+    let exp = Math.ceil(expectation * 100) / 100
+    let u = Math.ceil(ucb * 100) / 100
+    return node("tr")
+      .children([
+        node("td").children(name),
+        node("td").children(count),
+        node("td").children(exp),
+        node("td").children(u)
+      ])
+  }
+}
+class BanditStats extends Component{
+  onRender({bandit}){
+    let n = bandit.n
+    let armsData = bandit.arms.map( (arm) => {
+      return {
+        name: arm.label,
+        count: arm.count,
+        expectation: arm.expectation,
+        ucb: arm.calcUCB(n) // TODO
+      }
+    })
+    armsData = armsData.sort( (a, b) => b.ucb - a.ucb )
+    console.log(armsData)
+    let rows = armsData.map( arm => node(Row).attrs(arm) )
+    return node("table").attrs({class: "badint-stats"}).children(rows)
+  }
+}
+
 class App extends Component{
-  onRender({tags}){
+  onRender({tags, bandit}){
     let tagsId = "__tags"
     return node("div")
       .children([
         node(CopyButton).attrs({ target: `#${tagsId}` }),
         node(Tags).attrs({ tags, id:tagsId }),
+        node(Links),
+        node(BanditStats).attrs({ bandit }),
       ])
   }
 }
 
 docReady( function(){
   let container = document.getElementById('container')
-  let ts = calcTags().then(tags => {
-    mountToDom(container, node(App).attrs({tags: tags}));
+  let ts = calcTags().then( ({tags, bandit}) => {
+    mountToDom(container, node(App).attrs({tags, bandit}));
+  }).catch(e => {
+    console.error(e)
   })
 })

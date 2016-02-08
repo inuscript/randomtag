@@ -17,9 +17,10 @@ export function bandit(){
 export default function(num = 25){
   console.debug("use bandit logic")
   return bandit().then( bandit => {
-    let tag = bandit.select()
-    return tag.splice(0, num)
-  }).then( tag => {
-    return primaryTag.concat(tag)
+    let tags = bandit.select().splice(0, num)
+    return { 
+      tags: primaryTag.concat(tags), 
+      bandit
+    }
   })
 }
