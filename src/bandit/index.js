@@ -1,9 +1,8 @@
-import Storage from "./firebase"
+import Storage from "../storage/firebase"
 import masterTag, { primary as primaryTag } from "@inuscript/dogtag"
 import calcBandit from "./calc"
 
-export default function(num = 25){
-  console.debug("use bandit logic")
+export function bandit(){
   let str = new Storage()
   return str.media().then( _m => {
     let media = _m.sort( (a, b) => a.time < b.time)
@@ -12,7 +11,13 @@ export default function(num = 25){
     return masterTag().then( tags => {
       return calcBandit(tags, media)
     })
-  }).then( tag => {
+  })
+}
+
+export default function(num = 25){
+  console.debug("use bandit logic")
+  return bandit().then( bandit => {
+    let tag = bandit.select()
     return tag.splice(0, num)
   }).then( tag => {
     return primaryTag.concat(tag)
