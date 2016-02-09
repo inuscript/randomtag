@@ -81,6 +81,7 @@ class App extends Component{
 docReady( function(){
   let container = document.getElementById('container')
   let ts = calcTags().then( ({tags, stats}) => {
+    container.innerHTML = "" // clean
     mountToDom(container, node(App).attrs({tags, stats}));
   }).catch(e => {
     console.error(e)

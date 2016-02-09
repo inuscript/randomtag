@@ -9322,16 +9322,9 @@ exports.default = bandit;
 
 var _toZok = require("@inuscript/to-zok");
 
-var _tags = require("../storage/tags");
-
-var _tags2 = _interopRequireDefault(_tags);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function bandit(tags, media) {
-  var n = (0, _tags2.default)(media);
+function bandit(tags, normalize) {
   var bandit = new _toZok.UCBBandit(tags);
-  n.forEach(function (_ref) {
+  normalize.forEach(function (_ref) {
     var tag = _ref.tag;
     var count = _ref.count;
 
@@ -9342,7 +9335,7 @@ function bandit(tags, media) {
   return bandit;
 }
 
-},{"../storage/tags":257,"@inuscript/to-zok":2}],254:[function(require,module,exports){
+},{"@inuscript/to-zok":2}],254:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9378,6 +9371,10 @@ var _calc = require("./calc");
 
 var _calc2 = _interopRequireDefault(_calc);
 
+var _likes = require("../storage/likes");
+
+var _likes2 = _interopRequireDefault(_likes);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function bandit() {
@@ -9388,13 +9385,15 @@ function bandit() {
     });
     return media;
   }).then(function (media) {
+    var normalize = (0, _likes2.default)(media);
+
     return (0, _dogtag2.default)().then(function (tags) {
-      return (0, _calc2.default)(tags, media);
+      return (0, _calc2.default)(tags, normalize);
     });
   });
 }
 
-},{"../storage/firebase":256,"./calc":253,"@inuscript/dogtag":1}],255:[function(require,module,exports){
+},{"../storage/firebase":256,"../storage/likes":257,"./calc":253,"@inuscript/dogtag":1}],255:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -9595,6 +9594,7 @@ var App = function (_Component7) {
     var tags = _ref7.tags;
     var stats = _ref7.stats;
 
+    container.innerHTML = ""; // clean
     (0, _vidom.mountToDom)(container, (0, _vidom.node)(App).attrs({ tags: tags, stats: stats }));
   }).catch(function (e) {
     console.error(e);
@@ -9629,7 +9629,7 @@ var _class = function () {
     key: "media",
     value: function media() {
       var num = arguments.length <= 0 || arguments[0] === undefined ? 30 : arguments[0];
-
+      // TODO: after 2015-12-28
       var mediaRef = this.ref.child("media").orderByChild("time").limitToLast(num);
       return new Promise(function (resolve, reject) {
         mediaRef.once("value", function (snap) {
@@ -9666,9 +9666,11 @@ function tagLikes(media) {
   }, {});
 }
 
+// square mean
+// TODO: normalize
 function tagNormalized(media) {
   var likes = media.map(function (m) {
-    return m.like;
+    return m.like * m.like;
   });
   var max = Math.max.apply(null, likes);
   var min = Math.min.apply(null, likes);
@@ -9679,7 +9681,8 @@ function tagNormalized(media) {
     var tag = _ref2[0];
     var counts = _ref2[1];
 
-    var norm = counts.map(function (c) {
+    var norm = counts.map(function (_c) {
+      var c = _c * _c;
       return (c - min) / (max - min);
     });
     return {

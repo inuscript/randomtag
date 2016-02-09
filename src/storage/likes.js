@@ -10,13 +10,18 @@ function tagLikes(media){
   }, {})
 }
 
+// square mean
+// TODO: normalize
 export default function tagNormalized(media){
-  let likes = media.map( (m) => m.like )
+  let likes = media.map( (m) => m.like * m.like )
   let max = Math.max.apply(null, likes)
   let min = Math.min.apply(null, likes)
   let tl = tagLikes(media)
   return Object.entries(tl).map( ([tag, counts]) => {
-    let norm = counts.map( (c) => (c - min) / (max - min))
+    let norm = counts.map( (_c) => {
+      let c = _c * _c
+      return (c - min) / (max - min)
+    })
     return {
       tag: tag,
       count: norm
