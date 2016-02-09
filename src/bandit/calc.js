@@ -1,10 +1,8 @@
 import { UCBBandit } from "@inuscript/to-zok"
-import tagNormalized from "../storage/tags"
 
-export default function bandit(tags, media){
-  let n = tagNormalized(media)
+export default function bandit(tags, normalize){
   let bandit = new UCBBandit( tags )
-  n.forEach( ({tag, count}) => {
+  normalize.forEach( ({tag, count}) => {
     count.forEach( c => {
       bandit.reward(tag, c)
     })
