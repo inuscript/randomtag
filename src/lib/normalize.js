@@ -11,21 +11,10 @@ function normalize(counts, mean){
   })
 }
 
-function histogram(flatten){
-  let res = {}
-  flatten.map( _c => {
-    let c = Math.ceil(_c / 10) * 10
-    let r = res[c] ? res[c] : 0
-    r++
-    res[c] = r
-  })
-  return res
-}
 // square mean
 // TODO: normalize
 export default function tagNormalized(countsObj){
   let flatten = flattenObj(countsObj)
-  console.log(histogram(flatten))
   let m = mean(flatten)
   return Object.entries(countsObj).map( ([key, counts]) => {
     return {
