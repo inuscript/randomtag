@@ -3,6 +3,7 @@ import Clipboard from "clipboard"
 import { node , Component, mountToDom } from 'vidom/lib/vidom';
 import docReady from "doc-ready"
 import calcTags from "./bandit/index"
+import { round } from "mathjs"
 
 class CopyButton extends Component{
   onRender({target}){
@@ -47,14 +48,13 @@ class Links extends Component{
 }
 class Row extends Component{
   onRender({label, count, expectation, ucb }){
-    let exp = Math.ceil(expectation * 100) / 100
-    let u = Math.ceil(ucb * 100) / 100
     return node("tr")
       .children([
         node("td").children(label),
         node("td").children(count),
-        node("td").children(exp),
-        node("td").children(u)
+        node("td").children(round(expectation, 2)),
+        node("td").children(round(ucb, 2)),
+        node("td").children(round(ucb - expectation, 2))
       ])
   }
 }
