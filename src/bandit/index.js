@@ -34,7 +34,8 @@ export default function(num = 25){
     let tags = result.concat().splice(0, num).map( v => v.label )
     return { 
       tags: primaryTag.concat(tags), 
-      stats: result
+      stats: result,
+      n: bandit.n
     }
   })
 }
