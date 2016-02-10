@@ -1,26 +1,29 @@
-
-
+import { std, mean } from "mathjs"
 const flattenObj = (obj) => {
-  return Object.entries(obj).reduce((curr, [key, counts]) => {
+  return Object.values(obj).reduce((curr, [counts]) => {
     return curr.concat(counts)
   }, [])
 }
 
+function normalize(counts, std, mean){
+  return counts.map( (c) => {
+    return (c - mean) / std
+  })
+}
 // square mean
 // TODO: normalize
 export default function tagNormalized(countsObj){
   let flatten = flattenObj(countsObj)
-  let pow = flatten.map( i => i * i)
-  let max = Math.max.apply(null, pow)
-  let min = Math.min.apply(null, pow)
-  return Object.entries(countsObj).map( ([key, counts]) => {
-    let norm = counts.map( (_c) => {
-      let c = _c * _c
-      return (c - min) / (max - min)
-    })
+  let s = std(flatten)
+  let m = mean(flatten)
+  console.log(m, s)
+  let result = Object.entries(countsObj).map( ([key, counts]) => {
     return {
       key: key,
-      values: norm
+      values: normalize(counts, s, m)
     }
   })
+  let vs = result.map( ({ values }) => values )
+  console.log(vs, std(vs), mean(vs))
+  return result 
 }
