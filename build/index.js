@@ -9328,6 +9328,7 @@ function bandit(tags, normalize) {
     var tag = _ref.tag;
     var count = _ref.count;
 
+    console.log(tag, count);
     count.forEach(function (c) {
       bandit.reward(tag, c);
     });
@@ -9371,9 +9372,13 @@ var _calc = require("./calc");
 
 var _calc2 = _interopRequireDefault(_calc);
 
-var _likes = require("../storage/likes");
+var _tagLikes = require("../storage/tagLikes");
 
-var _likes2 = _interopRequireDefault(_likes);
+var _tagLikes2 = _interopRequireDefault(_tagLikes);
+
+var _normalize = require("../lib/normalize");
+
+var _normalize2 = _interopRequireDefault(_normalize);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -9385,15 +9390,20 @@ function bandit() {
     });
     return media;
   }).then(function (media) {
-    var normalize = (0, _likes2.default)(media);
-
     return (0, _dogtag2.default)().then(function (tags) {
-      return (0, _calc2.default)(tags, normalize);
+      var tl = (0, _tagLikes2.default)(media);
+      var normalized = (0, _normalize2.default)(tl).map(function (r) {
+        return {
+          tag: r.key,
+          count: r.values
+        };
+      });
+      return (0, _calc2.default)(tags, normalized);
     });
   });
 }
 
-},{"../storage/firebase":256,"../storage/likes":257,"./calc":253,"@inuscript/dogtag":1}],255:[function(require,module,exports){
+},{"../lib/normalize":256,"../storage/firebase":257,"../storage/tagLikes":258,"./calc":253,"@inuscript/dogtag":1}],255:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -9604,6 +9614,50 @@ var App = function (_Component7) {
 },{"./bandit/index":254,"babel-polyfill":20,"clipboard":23,"doc-ready":213,"vidom/lib/vidom":252}],256:[function(require,module,exports){
 "use strict";
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = tagNormalized;
+
+
+// square mean
+// TODO: normalize
+function tagNormalized(countsObj) {
+  var flatten = Object.entries(countsObj).reduce(function (curr, _ref) {
+    var _ref2 = _slicedToArray(_ref, 2);
+
+    var key = _ref2[0];
+    var counts = _ref2[1];
+
+    return curr.concat(counts);
+  }, []);
+  var pow = flatten.map(function (i) {
+    return i * i;
+  });
+  var max = Math.max.apply(null, pow);
+  var min = Math.min.apply(null, pow);
+  return Object.entries(countsObj).map(function (_ref3) {
+    var _ref4 = _slicedToArray(_ref3, 2);
+
+    var key = _ref4[0];
+    var counts = _ref4[1];
+
+    var norm = counts.map(function (_c) {
+      var c = _c * _c;
+      return (c - min) / (max - min);
+    });
+    return {
+      key: key,
+      values: norm
+    };
+  });
+}
+
+},{}],257:[function(require,module,exports){
+"use strict";
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 Object.defineProperty(exports, "__esModule", {
@@ -9645,16 +9699,13 @@ var _class = function () {
 
 exports.default = _class;
 
-},{"firebase":215}],257:[function(require,module,exports){
+},{"firebase":215}],258:[function(require,module,exports){
 "use strict";
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = tagNormalized;
-
+exports.default = tagLikes;
 function tagLikes(media) {
   return media.reduce(function (tags, m) {
     m.tags.map(function (tag) {
@@ -9664,32 +9715,6 @@ function tagLikes(media) {
     });
     return tags;
   }, {});
-}
-
-// square mean
-// TODO: normalize
-function tagNormalized(media) {
-  var likes = media.map(function (m) {
-    return m.like * m.like;
-  });
-  var max = Math.max.apply(null, likes);
-  var min = Math.min.apply(null, likes);
-  var tl = tagLikes(media);
-  return Object.entries(tl).map(function (_ref) {
-    var _ref2 = _slicedToArray(_ref, 2);
-
-    var tag = _ref2[0];
-    var counts = _ref2[1];
-
-    var norm = counts.map(function (_c) {
-      var c = _c * _c;
-      return (c - min) / (max - min);
-    });
-    return {
-      tag: tag,
-      count: norm
-    };
-  });
 }
 
 },{}]},{},[255]);
