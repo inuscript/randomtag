@@ -1,11 +1,15 @@
 
 
+const flattenObj = (obj) => {
+  return Object.entries(obj).reduce((curr, [key, counts]) => {
+    return curr.concat(counts)
+  }, [])
+}
+
 // square mean
 // TODO: normalize
 export default function tagNormalized(countsObj){
-  let flatten = Object.entries(countsObj).reduce((curr, [key, counts]) => {
-    return curr.concat(counts)
-  }, [])
+  let flatten = flattenObj(countsObj)
   let pow = flatten.map( i => i * i)
   let max = Math.max.apply(null, pow)
   let min = Math.min.apply(null, pow)

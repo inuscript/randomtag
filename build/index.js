@@ -9328,7 +9328,6 @@ function bandit(tags, normalize) {
     var tag = _ref.tag;
     var count = _ref.count;
 
-    console.log(tag, count);
     count.forEach(function (c) {
       bandit.reward(tag, c);
     });
@@ -9339,16 +9338,24 @@ function bandit(tags, normalize) {
 },{"@inuscript/to-zok":2}],254:[function(require,module,exports){
 "use strict";
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.bandit = bandit;
 
 exports.default = function () {
   var num = arguments.length <= 0 || arguments[0] === undefined ? 25 : arguments[0];
 
   console.debug("use bandit logic");
-  return bandit().then(function (bandit) {
+  return Promise.all([fetchMedia(), (0, _dogtag2.default)()]).then(function (_ref) {
+    var _ref2 = _slicedToArray(_ref, 2);
+
+    var media = _ref2[0];
+    var tags = _ref2[1];
+
+    return bandit(media, tags);
+  }).then(function (bandit) {
     var result = bandit.serialize();
     var tags = result.concat().splice(0, num).map(function (v) {
       return v.label;
@@ -9382,25 +9389,25 @@ var _normalize2 = _interopRequireDefault(_normalize);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function bandit() {
+function fetchMedia() {
   var str = new _firebase2.default();
   return str.media().then(function (_m) {
     var media = _m.sort(function (a, b) {
       return a.time < b.time;
     });
     return media;
-  }).then(function (media) {
-    return (0, _dogtag2.default)().then(function (tags) {
-      var tl = (0, _tagLikes2.default)(media);
-      var normalized = (0, _normalize2.default)(tl).map(function (r) {
-        return {
-          tag: r.key,
-          count: r.values
-        };
-      });
-      return (0, _calc2.default)(tags, normalized);
-    });
   });
+}
+
+function bandit(media, masterTags) {
+  var tl = (0, _tagLikes2.default)(media);
+  var normalized = (0, _normalize2.default)(tl).map(function (r) {
+    return {
+      tag: r.key,
+      count: r.values
+    };
+  });
+  return (0, _calc2.default)(masterTags, normalized);
 }
 
 },{"../lib/normalize":256,"../storage/firebase":257,"../storage/tagLikes":258,"./calc":253,"@inuscript/dogtag":1}],255:[function(require,module,exports){
@@ -9622,10 +9629,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = tagNormalized;
 
 
-// square mean
-// TODO: normalize
-function tagNormalized(countsObj) {
-  var flatten = Object.entries(countsObj).reduce(function (curr, _ref) {
+var flattenObj = function flattenObj(obj) {
+  return Object.entries(obj).reduce(function (curr, _ref) {
     var _ref2 = _slicedToArray(_ref, 2);
 
     var key = _ref2[0];
@@ -9633,6 +9638,12 @@ function tagNormalized(countsObj) {
 
     return curr.concat(counts);
   }, []);
+};
+
+// square mean
+// TODO: normalize
+function tagNormalized(countsObj) {
+  var flatten = flattenObj(countsObj);
   var pow = flatten.map(function (i) {
     return i * i;
   });
