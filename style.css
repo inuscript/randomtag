@@ -19,3 +19,11 @@ textarea{
   background: rgb(197, 205, 212);
   font-size: small;
 }
+.tag-item{
+  cursor: pointer
+  margin: 0 0.2em;
+  line-height: 2.5em;
+  border-radius: 1em;
+  padding: 0.5em;
+  background: rgb(197, 205, 212);
+}

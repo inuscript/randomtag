@@ -78647,7 +78647,7 @@ exports.default = function () {
     return bandit(media, tags);
   }).then(function (bandit) {
     var result = bandit.serialize();
-    var tags = result.concat().splice(0, num).map(function (v) {
+    var tags = result.concat().map(function (v) {
       return v.label;
     });
     return {
@@ -78771,8 +78771,13 @@ var Tag = function (_Component2) {
     key: "onRender",
     value: function onRender(_ref2) {
       var tag = _ref2.tag;
+      var _onClick = _ref2.onClick;
 
-      return (0, _vidom.node)("span").children("#" + tag + " ");
+      return (0, _vidom.node)("span").children("#" + tag + " ").attrs({
+        onClick: function onClick(e) {
+          return _onClick(tag);
+        }
+      });
     }
   }]);
 
@@ -78792,10 +78797,15 @@ var Tags = function (_Component3) {
     key: "onRender",
     value: function onRender(_ref3) {
       var tags = _ref3.tags;
-      var id = _ref3.id;
+      var onTagClick = _ref3.onTagClick;
 
-      return (0, _vidom.node)("div").attrs({ id: id }).children(tags.map(function (tag) {
-        return (0, _vidom.node)(Tag).attrs({ tag: tag });
+      return (0, _vidom.node)("div").children(tags.map(function (tag) {
+        return (0, _vidom.node)(Tag).attrs({
+          tag: tag,
+          onClick: function onClick(e) {
+            return onTagClick(tag);
+          }
+        });
       }));
     }
   }]);
@@ -78803,8 +78813,32 @@ var Tags = function (_Component3) {
   return Tags;
 }(_vidom.Component);
 
-var Links = function (_Component4) {
-  _inherits(Links, _Component4);
+var CopyTags = function (_Component4) {
+  _inherits(CopyTags, _Component4);
+
+  function CopyTags() {
+    _classCallCheck(this, CopyTags);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(CopyTags).apply(this, arguments));
+  }
+
+  _createClass(CopyTags, [{
+    key: "onRender",
+    value: function onRender(_ref4) {
+      var tags = _ref4.tags;
+      var id = _ref4.id;
+
+      return (0, _vidom.node)("div").attrs({ id: id, class: "copy-tag" }).children(tags.map(function (tag) {
+        return "#" + tag;
+      }).join(" "));
+    }
+  }]);
+
+  return CopyTags;
+}(_vidom.Component);
+
+var Links = function (_Component5) {
+  _inherits(Links, _Component5);
 
   function Links() {
     _classCallCheck(this, Links);
@@ -78825,8 +78859,8 @@ var Links = function (_Component4) {
   return Links;
 }(_vidom.Component);
 
-var Row = function (_Component5) {
-  _inherits(Row, _Component5);
+var Row = function (_Component6) {
+  _inherits(Row, _Component6);
 
   function Row() {
     _classCallCheck(this, Row);
@@ -78835,22 +78869,30 @@ var Row = function (_Component5) {
   }
 
   _createClass(Row, [{
+    key: "round",
+    value: function round(num) {
+      if (isNaN(num)) {
+        return "-";
+      }
+      return (0, _mathjs.round)(num, 2);
+    }
+  }, {
     key: "onRender",
-    value: function onRender(_ref4) {
-      var label = _ref4.label;
-      var count = _ref4.count;
-      var expectation = _ref4.expectation;
-      var ucb = _ref4.ucb;
+    value: function onRender(_ref5) {
+      var label = _ref5.label;
+      var count = _ref5.count;
+      var expectation = _ref5.expectation;
+      var ucb = _ref5.ucb;
 
-      return (0, _vidom.node)("tr").children([(0, _vidom.node)("td").children(label), (0, _vidom.node)("td").children(count), (0, _vidom.node)("td").children((0, _mathjs.round)(expectation, 2)), (0, _vidom.node)("td").children((0, _mathjs.round)(ucb, 2)), (0, _vidom.node)("td").children((0, _mathjs.round)(ucb - expectation, 2))]);
+      return (0, _vidom.node)("tr").children([(0, _vidom.node)("td").children(label), (0, _vidom.node)("td").children(count), (0, _vidom.node)("td").children(this.round(expectation)), (0, _vidom.node)("td").children(this.round(ucb)), (0, _vidom.node)("td").children(this.round(ucb - expectation))]);
     }
   }]);
 
   return Row;
 }(_vidom.Component);
 
-var BanditStats = function (_Component6) {
-  _inherits(BanditStats, _Component6);
+var BanditStats = function (_Component7) {
+  _inherits(BanditStats, _Component7);
 
   function BanditStats() {
     _classCallCheck(this, BanditStats);
@@ -78860,8 +78902,8 @@ var BanditStats = function (_Component6) {
 
   _createClass(BanditStats, [{
     key: "onRender",
-    value: function onRender(_ref5) {
-      var stats = _ref5.stats;
+    value: function onRender(_ref6) {
+      var stats = _ref6.stats;
 
       var rows = stats.map(function (st) {
         return (0, _vidom.node)(Row).attrs(st);
@@ -78873,8 +78915,8 @@ var BanditStats = function (_Component6) {
   return BanditStats;
 }(_vidom.Component);
 
-var App = function (_Component7) {
-  _inherits(App, _Component7);
+var App = function (_Component8) {
+  _inherits(App, _Component8);
 
   function App() {
     _classCallCheck(this, App);
@@ -78883,13 +78925,46 @@ var App = function (_Component7) {
   }
 
   _createClass(App, [{
+    key: "onInit",
+    value: function onInit() {
+      this.allTags = [];
+      this.rejected = {};
+    }
+  }, {
+    key: "onTagClick",
+    value: function onTagClick(tag) {
+      if (this.rejected[tag]) {
+        this.rejected[tag] = 0;
+      } else {
+        this.rejected[tag] = 1;
+      }
+      this.update();
+    }
+  }, {
     key: "onRender",
-    value: function onRender(_ref6) {
-      var tags = _ref6.tags;
-      var stats = _ref6.stats;
+    value: function onRender(_ref7) {
+      var _this9 = this;
+
+      var tags = _ref7.tags;
+      var stats = _ref7.stats;
 
       var tagsId = "__tags";
-      return (0, _vidom.node)("div").children([(0, _vidom.node)(CopyButton).attrs({ target: "#" + tagsId }), (0, _vidom.node)(Tags).attrs({ tags: tags, id: tagsId }), (0, _vidom.node)(Links), (0, _vidom.node)(BanditStats).attrs({ stats: stats })]);
+      this.allTags = tags;
+      return (0, _vidom.node)("div").children([(0, _vidom.node)(CopyButton).attrs({ target: "#" + tagsId }), (0, _vidom.node)(Tags).attrs({
+        tags: this.tags,
+        onTagClick: function onTagClick(tag) {
+          return _this9.onTagClick(tag);
+        }
+      }), (0, _vidom.node)(CopyTags).attrs({ tags: this.tags, id: tagsId }), (0, _vidom.node)(Links), (0, _vidom.node)(BanditStats).attrs({ stats: stats })]);
+    }
+  }, {
+    key: "tags",
+    get: function get() {
+      var _this10 = this;
+
+      return this.allTags.filter(function (t) {
+        return !_this10.rejected[t];
+      }).splice(0, 25);
     }
   }]);
 
@@ -78898,9 +78973,9 @@ var App = function (_Component7) {
 
 (0, _docReady2.default)(function () {
   var container = document.getElementById('container');
-  var ts = (0, _index2.default)().then(function (_ref7) {
-    var tags = _ref7.tags;
-    var stats = _ref7.stats;
+  var ts = (0, _index2.default)().then(function (_ref8) {
+    var tags = _ref8.tags;
+    var stats = _ref8.stats;
 
     container.innerHTML = ""; // clean
     (0, _vidom.mountToDom)(container, (0, _vidom.node)(App).attrs({ tags: tags, stats: stats }));

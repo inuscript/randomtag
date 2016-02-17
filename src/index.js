@@ -21,6 +21,7 @@ class CopyButton extends Component{
 class Tag extends Component{
   onRender({tag, onClick}){
     return node("span").children(`#${tag} `).attrs({
+      class: "tag-item",
       onClick: e => onClick(tag)
     })
   }
