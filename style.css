@@ -13,5 +13,9 @@ textarea{
   border: 1px solid gray;
 }
 .copy-tag{
+  border-radius: 1em;
+  padding: 1em;
+  color: #125688;
+  background: rgb(197, 205, 212);
   font-size: small;
 }
