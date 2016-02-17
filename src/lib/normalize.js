@@ -1,4 +1,4 @@
-import { std, mean } from "mathjs"
+import { std, mean, max, min } from "mathjs"
 const flattenObj = (obj) => {
   return Object.values(obj).reduce((curr, [counts]) => {
     return curr.concat(counts)

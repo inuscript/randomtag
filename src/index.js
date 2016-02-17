@@ -47,14 +47,20 @@ class Links extends Component{
   }
 }
 class Row extends Component{
+  round(num){
+    if(isNaN(num)){
+      return "-"
+    }
+    return round(num, 2)
+  }
   onRender({label, count, expectation, ucb }){
     return node("tr")
       .children([
         node("td").children(label),
         node("td").children(count),
-        node("td").children(round(expectation, 2)),
-        node("td").children(round(ucb, 2)),
-        node("td").children(round(ucb - expectation, 2))
+        node("td").children(this.round(expectation)),
+        node("td").children(this.round(ucb)),
+        node("td").children(this.round(ucb - expectation))
       ])
   }
 }
