@@ -19,17 +19,22 @@ class CopyButton extends Component{
 }
 
 class Tag extends Component{
-  onRender({tag}){
-    return node("span").children(`#${tag} `)
+  onRender({tag, onClick}){
+    return node("span").children(`#${tag} `).attrs({
+      onClick: e => onClick(tag)
+    })
   }
 }
 
 class Tags extends Component{
-  onRender({ tags }){
+  onRender({ tags , onTagClick }){
     return node("div")
       .children(
         tags.map( (tag) => {
-          return node(Tag).attrs({tag})
+          return node(Tag).attrs({
+            tag,
+            onClick: e => onTagClick(tag)
+          })
         })
       )
   }
@@ -81,13 +86,34 @@ class BanditStats extends Component{
 }
 
 class App extends Component{
+  get tags(){
+    return this.allTags.filter( t => {
+      return !this.rejected[t]
+    }).splice(0, 25)
+  }
+  onInit(){
+    this.allTags = []
+    this.rejected = {}
+  }
+  onTagClick(tag){
+    if(this.rejected[tag]){
+      this.rejected[tag] = 0
+    }else{
+      this.rejected[tag] = 1
+    }
+    this.update()
+  }
   onRender({tags, stats}){
     let tagsId = "__tags"
+    this.allTags = tags
     return node("div")
       .children([
         node(CopyButton).attrs({ target: `#${tagsId}` }),
-        node(Tags).attrs({ tags }),
-        node(CopyTags).attrs({ tags, id:tagsId }),
+        node(Tags).attrs({ 
+          tags: this.tags, 
+          onTagClick: tag => this.onTagClick(tag)
+        }),
+        node(CopyTags).attrs({ tags: this.tags, id:tagsId }),
         node(Links),
         node(BanditStats).attrs({ stats }),
       ])

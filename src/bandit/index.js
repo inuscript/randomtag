@@ -31,7 +31,7 @@ export default function(num = 25){
     return bandit(media, tags)
   }).then( bandit => {
     let result = bandit.serialize()
-    let tags = result.concat().splice(0, num).map( v => v.label )
+    let tags = result.concat().map( v => v.label )
     return { 
       tags: primaryTag.concat(tags), 
       stats: result,
