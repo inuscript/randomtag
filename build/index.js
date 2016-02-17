@@ -34,7 +34,7 @@ class Arm{
   }
   calcUCB(n){
     if(this.count === 0){
-      return Number.MAX_VALUE
+      return Number.POSITIVE_INFINITY
     }
     return this.expectation + Math.sqrt(2 * Math.log(n) / this.count)
   }
@@ -78774,6 +78774,7 @@ var Tag = function (_Component2) {
       var _onClick = _ref2.onClick;
 
       return (0, _vidom.node)("span").children("#" + tag + " ").attrs({
+        class: "tag-item",
         onClick: function onClick(e) {
           return _onClick(tag);
         }
@@ -78874,6 +78875,10 @@ var Row = function (_Component6) {
       if (isNaN(num)) {
         return "-";
       }
+      if (num === Number.POSITIVE_INFINITY) {
+        return "Infinity";
+      }
+      console.log(Number.POSITIVE_INFINITY);
       return (0, _mathjs.round)(num, 2);
     }
   }, {
