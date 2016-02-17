@@ -12,3 +12,6 @@ textarea{
 .badint-stats tr td{
   border: 1px solid gray;
 }
+.copy-tag{
+  font-size: small;
+}

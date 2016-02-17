@@ -17,11 +17,13 @@ class CopyButton extends Component{
       .children("Copy")
   }
 }
+
 class Tag extends Component{
   onRender({tag}){
     return node("span").children(`#${tag} `)
   }
 }
+
 class Tags extends Component{
   onRender({ tags }){
     return node("div")
@@ -32,13 +34,15 @@ class Tags extends Component{
       )
   }
 }
+
 class CopyTags extends Component{
   onRender({ tags, id }){
     return node("div")
-      .attrs({id})
+      .attrs({id, class: "copy-tag"})
       .children(tags.map( (tag) => `#${tag}` ).join(" "))
   }
 }
+
 class Links extends Component{
   onRender(){
     let base = "https://github.com/inuscript/dogtag"
