@@ -17,21 +17,26 @@ class CopyButton extends Component{
       .children("Copy")
   }
 }
-
 class Tag extends Component{
   onRender({tag}){
     return node("span").children(`#${tag} `)
   }
 }
 class Tags extends Component{
-  onRender({ tags, id }){
+  onRender({ tags }){
     return node("div")
-      .attrs({id})
       .children(
         tags.map( (tag) => {
           return node(Tag).attrs({tag})
         })
       )
+  }
+}
+class CopyTags extends Component{
+  onRender({ tags, id }){
+    return node("div")
+      .attrs({id})
+      .children(tags.map( (tag) => `#${tag}` ).join(" "))
   }
 }
 class Links extends Component{
@@ -77,7 +82,8 @@ class App extends Component{
     return node("div")
       .children([
         node(CopyButton).attrs({ target: `#${tagsId}` }),
-        node(Tags).attrs({ tags, id:tagsId }),
+        node(Tags).attrs({ tags }),
+        node(CopyTags).attrs({ tags, id:tagsId }),
         node(Links),
         node(BanditStats).attrs({ stats }),
       ])
