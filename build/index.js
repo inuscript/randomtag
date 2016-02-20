@@ -13,83 +13,136 @@ module.exports = function tags(){
 module.exports.primary = [ "dog", "norfolkterrier" ]
 
 },{"axios":3}],2:[function(require,module,exports){
-"use strict"
-class Arm{
-  constructor( obj ){
-    this.label = obj.label
-    this.rewards = []
-  }
-  reward(r){
-    this.rewards.push(r)
-  }
-  get count(){
-    return this.rewards.length
-  }
-  get sum(){
-    return this.rewards.reduce( (sum, val ) => sum + val, 0)
-  }
-  get expectation(){
-    return this.sum / this.count
-  }
-  calcUCB(n){
-    if(this.count === 0){
-      return Number.POSITIVE_INFINITY
-    }
-    return this.expectation + Math.sqrt(2 * Math.log(n) / this.count)
-  }
-}
+"use strict";
 
-class UCBBandit{
-  constructor( arms ){
-    // this.arms = arms.length
-    this.arms = arms.map( (label) => {
-      return new Arm({label})
-    })
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Arm = function () {
+  function Arm(obj) {
+    _classCallCheck(this, Arm);
+
+    this.label = obj.label;
+    this.rewards = [];
   }
-  get n(){
-    return this.arms.reduce( (sum, arm) =>  sum + arm.count, 0)
-  }
-  searchArm(label){
-    return this.arms.find( (arm) => arm.label === label)
-  }
-  reward(label, reward){
-    let arm = this.searchArm(label)
-    if(!arm){
-      return // ignore
+
+  _createClass(Arm, [{
+    key: "reward",
+    value: function reward(r) {
+      this.rewards.push(r);
     }
-    arm.reward(reward)    
-  }
-  calcValues(){
-    return this.arms.map( (arm) => {
-      return {
-        arm: arm,
-        ucb: arm.calcUCB(this.n) 
+  }, {
+    key: "calcUCB",
+    value: function calcUCB(n) {
+      if (this.count === 0) {
+        return Number.POSITIVE_INFINITY;
       }
-    })
+      return this.expectation + Math.sqrt(2 * Math.log(n) / this.count);
+    }
+  }, {
+    key: "count",
+    get: function get() {
+      return this.rewards.length;
+    }
+  }, {
+    key: "sum",
+    get: function get() {
+      return this.rewards.reduce(function (sum, val) {
+        return sum + val;
+      }, 0);
+    }
+  }, {
+    key: "expectation",
+    get: function get() {
+      return this.sum / this.count;
+    }
+  }]);
+
+  return Arm;
+}();
+
+var UCBBandit = function () {
+  function UCBBandit(arms) {
+    _classCallCheck(this, UCBBandit);
+
+    // this.arms = arms.length
+    this.arms = arms.map(function (label) {
+      return new Arm({ label: label });
+    });
   }
-  calc(){
-    let valuesUCB = this.calcValues()
-    return valuesUCB.concat().sort((a, b) => b.ucb - a.ucb)
-  }
-  select(){
-    return this.calc().map( (v) => {
-      return v.arm.label
-    })
-  }
-  serialize(){
-    return this.calc().map( (val) => {
-      let arm = val.arm
-      let ucb = val.ucb
-      return {
-        label: arm.label,
-        count: arm.count,
-        expectation: arm.expectation,
-        ucb: ucb
+
+  _createClass(UCBBandit, [{
+    key: "searchArm",
+    value: function searchArm(label) {
+      return this.arms.find(function (arm) {
+        return arm.label === label;
+      });
+    }
+  }, {
+    key: "reward",
+    value: function reward(label, _reward) {
+      var arm = this.searchArm(label);
+      if (!arm) {
+        return; // ignore
       }
-    })
-  }
-}
-exports.UCBBandit = UCBBandit
+      arm.reward(_reward);
+    }
+  }, {
+    key: "calcValues",
+    value: function calcValues() {
+      var _this = this;
+
+      return this.arms.map(function (arm) {
+        return {
+          arm: arm,
+          ucb: arm.calcUCB(_this.n)
+        };
+      });
+    }
+  }, {
+    key: "calc",
+    value: function calc() {
+      var valuesUCB = this.calcValues();
+      return valuesUCB.concat().sort(function (a, b) {
+        return b.ucb - a.ucb;
+      });
+    }
+  }, {
+    key: "select",
+    value: function select() {
+      return this.calc().map(function (v) {
+        return v.arm.label;
+      });
+    }
+  }, {
+    key: "serialize",
+    value: function serialize() {
+      return this.calc().map(function (val) {
+        var arm = val.arm;
+        var ucb = val.ucb;
+        return {
+          label: arm.label,
+          count: arm.count,
+          expectation: arm.expectation,
+          ucb: ucb
+        };
+      });
+    }
+  }, {
+    key: "n",
+    get: function get() {
+      return this.arms.reduce(function (sum, arm) {
+        return sum + arm.count;
+      }, 0);
+    }
+  }]);
+
+  return UCBBandit;
+}();
+
+exports.UCBBandit = UCBBandit;
+
 },{}],3:[function(require,module,exports){
 module.exports = require('./lib/axios');
 },{"./lib/axios":5}],4:[function(require,module,exports){

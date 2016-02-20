@@ -2,6 +2,5 @@
   "presets": [
     "es2015",
     "stage-3"
-  ],
-  "only": ["src", "node_modules/@inuscript"]
+  ]
 }
