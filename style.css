@@ -20,7 +20,7 @@ textarea{
   font-size: small;
 }
 .tag-item{
-  cursor: pointer
+  cursor: pointer;
   margin: 0 0.2em;
   line-height: 2.5em;
   border-radius: 1em;
