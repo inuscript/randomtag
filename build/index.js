@@ -58969,7 +58969,7 @@ var _class = function () {
     value: function media() {
       // after 2015-12-28
       var start = new Date(2015, 11, 28).getTime();
-      var end = new Date().getTime() - 1000 * 60 * 60 * 24; // - 1 day
+      var end = new Date().getTime() - 1000 * 60 * 60 * 12; // - half day
       var mediaRef = this.ref.child("media").orderByChild("time").startAt(start).endAt(end);
       return new Promise(function (resolve, reject) {
         mediaRef.once("value", function (snap) {
