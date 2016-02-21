@@ -18,6 +18,7 @@ textarea{
   color: #125688;
   background: rgb(197, 205, 212);
   font-size: small;
+  -webkit-user-select: all;
 }
 .tag-item{
   cursor: pointer;
