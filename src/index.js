@@ -69,7 +69,6 @@ class Row extends Component{
     if(num === Number.POSITIVE_INFINITY){
       return "Infinity"
     }
-    console.log(Number.POSITIVE_INFINITY)
     return round(num, 2)
   }
   onRender({label, count, expectation, ucb }){

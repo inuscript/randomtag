@@ -15,7 +15,8 @@ function normalize(counts, mean){
 // TODO: normalize
 export default function tagNormalized(countsObj){
   let flatten = flattenObj(countsObj)
-  let m = mean(flatten)
+  let m = mean(flatten) * 1.2
+  console.log(m)
   return Object.entries(countsObj).map( ([key, counts]) => {
     return {
       key: key,

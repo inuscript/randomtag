@@ -58782,7 +58782,6 @@ var Row = function (_Component6) {
       if (num === Number.POSITIVE_INFINITY) {
         return "Infinity";
       }
-      console.log(Number.POSITIVE_INFINITY);
       return (0, _mathjs.round)(num, 2);
     }
   }, {
@@ -58926,7 +58925,8 @@ function normalize(counts, mean) {
 // TODO: normalize
 function tagNormalized(countsObj) {
   var flatten = flattenObj(countsObj);
-  var m = (0, _mathjs.mean)(flatten);
+  var m = (0, _mathjs.mean)(flatten) * 1.2;
+  console.log(m);
   return Object.entries(countsObj).map(function (_ref3) {
     var _ref4 = _slicedToArray(_ref3, 2);
 
