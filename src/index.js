@@ -4,6 +4,7 @@ import { node , Component, mountToDom } from 'vidom/lib/vidom';
 import docReady from "doc-ready"
 import calcTags from "./bandit/index"
 import { round } from "mathjs"
+import cx from "classnames"
 
 class CopyButton extends Component{
   onRender({target}){
@@ -71,8 +72,9 @@ class Row extends Component{
     }
     return round(num, 2)
   }
-  onRender({label, count, expectation, ucb }){
+  onRender({className, label, count, expectation, ucb }){
     return node("tr")
+      .attrs({class: className})
       .children([
         node("td").children(label),
         node("td").children(count),
@@ -83,8 +85,16 @@ class Row extends Component{
   }
 }
 class BanditStats extends Component{
-  onRender({stats}){
-    let rows = stats.map( st => node(Row).attrs(st) )
+  onRender({stats, tags}){
+    let rows = stats.map( st => {
+      let isActive = tags.indexOf(st.label) > -1
+      let attrs = st 
+      attrs["className"] = cx({
+        "tag-row": true,
+        "active": isActive
+      })
+      return node(Row).attrs(attrs)
+    })
     return node("table").attrs({class: "badint-stats"}).children(rows)
   }
 }
@@ -119,7 +129,7 @@ class App extends Component{
         }),
         node(CopyTags).attrs({ tags: this.tags, id:tagsId }),
         node(Links),
-        node(BanditStats).attrs({ stats }),
+        node(BanditStats).attrs({ stats, tags: this.tags }),
       ])
   }
 }

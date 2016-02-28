@@ -52,6 +52,7 @@
     "axios": "^0.9.1",
     "babel-polyfill": "^6.5.0",
     "chance": "^0.8.0",
+    "classnames": "^2.2.3",
     "clipboard": "^1.5.5",
     "doc-ready": "^1.0.3",
     "envify": "^3.4.0",

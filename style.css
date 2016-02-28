@@ -28,3 +28,6 @@ textarea{
   padding: 0.5em;
   background: rgb(197, 205, 212);
 }
+.tag-row.active{
+  background: rgb(246, 245, 125);
+}
