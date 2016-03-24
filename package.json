@@ -40,6 +40,7 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.4.5",
     "babel-polyfill": "^6.5.0",
     "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.5.0",
     "babel-register": "^6.5.1",
     "babelify": "^7.2.0",
     "browserify": "^13.0.0",
@@ -47,9 +48,12 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
+    "@cycle/core": "^6.0.3",
+    "@cycle/dom": "^9.2.2",
     "@inuscript/dogtag": "^1.1.1",
     "@inuscript/to-zok": "^2.0.0",
     "axios": "^0.9.1",
+    "babel-plugin-transform-react-jsx": "^6.7.4",
     "babel-polyfill": "^6.5.0",
     "chance": "^0.8.0",
     "classnames": "^2.2.3",
@@ -58,6 +62,7 @@
     "envify": "^3.4.0",
     "firebase": "^2.4.0",
     "mathjs": "^2.7.0",
+    "rx": "^4.1.0",
     "vidom": "^0.1.3"
   }
 }
