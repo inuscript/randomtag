@@ -58660,23 +58660,161 @@ function bandit(media, masterTags) {
 },{"../lib/normalize":752,"../storage/firebase":753,"../storage/tagLikes":754,"./calc":749,"@inuscript/dogtag":1}],751:[function(require,module,exports){
 "use strict";
 
+require("babel-polyfill");
+
+var _docReady = require("doc-ready");
+
+var _docReady2 = _interopRequireDefault(_docReady);
+
+var _index = require("./view/index");
+
+var _bandit = require("./bandit/");
+
+var _bandit2 = _interopRequireDefault(_bandit);
+
+var _vidom = require("vidom/lib/vidom");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+(0, _docReady2.default)(function () {
+  var container = document.getElementById('container');
+  var ts = (0, _bandit2.default)().then(function (_ref) {
+    var tags = _ref.tags;
+    var stats = _ref.stats;
+
+    container.innerHTML = ""; // clean
+    (0, _vidom.mountToDom)(container, (0, _vidom.node)(_index.App).attrs({ tags: tags, stats: stats }));
+  }).catch(function (e) {
+    console.error(e);
+  });
+});
+
+},{"./bandit/":750,"./view/index":755,"babel-polyfill":20,"doc-ready":215,"vidom/lib/vidom":748}],752:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+exports.default = tagNormalized;
+
+var _mathjs = require("mathjs");
+
+var flattenObj = function flattenObj(obj) {
+  return Object.values(obj).reduce(function (curr, _ref) {
+    var _ref2 = _slicedToArray(_ref, 1);
+
+    var counts = _ref2[0];
+
+    return curr.concat(counts);
+  }, []);
+};
+
+function normalize(counts, mean) {
+  return counts.map(function (c) {
+    return c > mean ? 1 : 0;
+  });
+}
+
+// square mean
+// TODO: normalize
+function tagNormalized(countsObj) {
+  var flatten = flattenObj(countsObj);
+  var m = (0, _mathjs.mean)(flatten) * 1.2;
+  console.log(m);
+  return Object.entries(countsObj).map(function (_ref3) {
+    var _ref4 = _slicedToArray(_ref3, 2);
+
+    var key = _ref4[0];
+    var counts = _ref4[1];
+
+    return {
+      key: key,
+      values: normalize(counts, m)
+    };
+  });
+}
+
+},{"mathjs":223}],753:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-require("babel-polyfill");
+var _firebase = require("firebase");
+
+var _firebase2 = _interopRequireDefault(_firebase);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _class = function () {
+  function _class() {
+    _classCallCheck(this, _class);
+
+    this.ref = new _firebase2.default("http://thridsta.firebaseio.com");
+  }
+
+  _createClass(_class, [{
+    key: "media",
+    value: function media() {
+      // after 2015-12-28
+      var start = new Date(2015, 11, 28).getTime();
+      var end = new Date().getTime() - 1000 * 60 * 60 * 12; // - half day
+      var mediaRef = this.ref.child("media").orderByChild("time").startAt(start).endAt(end);
+      return new Promise(function (resolve, reject) {
+        mediaRef.once("value", function (snap) {
+          var items = Object.values(snap.val());
+          resolve(items);
+        });
+      });
+    }
+  }]);
+
+  return _class;
+}();
+
+exports.default = _class;
+
+},{"firebase":217}],754:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = tagLikes;
+function tagLikes(media) {
+  return media.reduce(function (tags, m) {
+    m.tags.map(function (tag) {
+      var t = tags[tag] || [];
+      t.push(m.like);
+      tags[tag] = t;
+    });
+    return tags;
+  }, {});
+}
+
+},{}],755:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.App = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _clipboard = require("clipboard");
 
 var _clipboard2 = _interopRequireDefault(_clipboard);
 
 var _vidom = require("vidom/lib/vidom");
-
-var _docReady = require("doc-ready");
-
-var _docReady2 = _interopRequireDefault(_docReady);
-
-var _index = require("./bandit/index");
-
-var _index2 = _interopRequireDefault(_index);
 
 var _mathjs = require("mathjs");
 
@@ -58887,7 +59025,7 @@ var BanditStats = function (_Component7) {
   return BanditStats;
 }(_vidom.Component);
 
-var App = function (_Component8) {
+var App = exports.App = function (_Component8) {
   _inherits(App, _Component8);
 
   function App() {
@@ -58943,128 +59081,4 @@ var App = function (_Component8) {
   return App;
 }(_vidom.Component);
 
-(0, _docReady2.default)(function () {
-  var container = document.getElementById('container');
-  var ts = (0, _index2.default)().then(function (_ref8) {
-    var tags = _ref8.tags;
-    var stats = _ref8.stats;
-
-    container.innerHTML = ""; // clean
-    (0, _vidom.mountToDom)(container, (0, _vidom.node)(App).attrs({ tags: tags, stats: stats }));
-  }).catch(function (e) {
-    console.error(e);
-  });
-});
-
-},{"./bandit/index":750,"babel-polyfill":20,"classnames":22,"clipboard":24,"doc-ready":215,"mathjs":223,"vidom/lib/vidom":748}],752:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-exports.default = tagNormalized;
-
-var _mathjs = require("mathjs");
-
-var flattenObj = function flattenObj(obj) {
-  return Object.values(obj).reduce(function (curr, _ref) {
-    var _ref2 = _slicedToArray(_ref, 1);
-
-    var counts = _ref2[0];
-
-    return curr.concat(counts);
-  }, []);
-};
-
-function normalize(counts, mean) {
-  return counts.map(function (c) {
-    return c > mean ? 1 : 0;
-  });
-}
-
-// square mean
-// TODO: normalize
-function tagNormalized(countsObj) {
-  var flatten = flattenObj(countsObj);
-  var m = (0, _mathjs.mean)(flatten) * 1.2;
-  console.log(m);
-  return Object.entries(countsObj).map(function (_ref3) {
-    var _ref4 = _slicedToArray(_ref3, 2);
-
-    var key = _ref4[0];
-    var counts = _ref4[1];
-
-    return {
-      key: key,
-      values: normalize(counts, m)
-    };
-  });
-}
-
-},{"mathjs":223}],753:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _firebase = require("firebase");
-
-var _firebase2 = _interopRequireDefault(_firebase);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var _class = function () {
-  function _class() {
-    _classCallCheck(this, _class);
-
-    this.ref = new _firebase2.default("http://thridsta.firebaseio.com");
-  }
-
-  _createClass(_class, [{
-    key: "media",
-    value: function media() {
-      // after 2015-12-28
-      var start = new Date(2015, 11, 28).getTime();
-      var end = new Date().getTime() - 1000 * 60 * 60 * 12; // - half day
-      var mediaRef = this.ref.child("media").orderByChild("time").startAt(start).endAt(end);
-      return new Promise(function (resolve, reject) {
-        mediaRef.once("value", function (snap) {
-          var items = Object.values(snap.val());
-          resolve(items);
-        });
-      });
-    }
-  }]);
-
-  return _class;
-}();
-
-exports.default = _class;
-
-},{"firebase":217}],754:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = tagLikes;
-function tagLikes(media) {
-  return media.reduce(function (tags, m) {
-    m.tags.map(function (tag) {
-      var t = tags[tag] || [];
-      t.push(m.like);
-      tags[tag] = t;
-    });
-    return tags;
-  }, {});
-}
-
-},{}]},{},[751]);
+},{"classnames":22,"clipboard":24,"mathjs":223,"vidom/lib/vidom":748}]},{},[751]);
