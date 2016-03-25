@@ -58790,13 +58790,14 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = tagLikes;
 function tagLikes(media) {
-  return media.reduce(function (tags, m) {
-    m.tags.map(function (tag) {
-      var t = tags[tag] || [];
+  return media.reduce(function (results, m) {
+    var mediaTags = m.tags || [];
+    mediaTags.map(function (tag) {
+      var t = results[tag] || [];
       t.push(m.like);
-      tags[tag] = t;
+      results[tag] = t;
     });
-    return tags;
+    return results;
   }, {});
 }
 

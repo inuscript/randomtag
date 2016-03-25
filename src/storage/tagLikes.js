@@ -1,10 +1,11 @@
 export default function tagLikes(media){
-  return media.reduce( (tags, m) => {
-    m.tags.map( (tag) => {
-      let t = tags[tag] || []
+  return media.reduce( (results, m) => {
+    let mediaTags = m.tags || []
+    mediaTags.map( (tag) => {
+      let t = results[tag] || []
       t.push(m.like)
-      tags[tag] = t
+      results[tag] = t
     })
-    return tags
+    return results
   }, {})
 }
