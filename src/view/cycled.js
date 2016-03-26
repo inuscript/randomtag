@@ -1,9 +1,10 @@
-import Rx from 'rx';
+/** @jsx hJSX */
+import Rx, {Observable} from 'rx';
 import Cycle from '@cycle/core';
-import {div, makeDOMDriver, hJSX, li} from '@cycle/dom';
+import {makeDOMDriver, hJSX, h} from '@cycle/dom';
 
 function tagComponent(tag){
-  return <span className="tag-item">{tag}</span>
+  return <span className="tag-item">{`#${tag} `}</span>
 }
 function tagsComponent(tags){
   return <div>{ tags.map( tag => tagComponent(tag) ) }</div>
@@ -11,11 +12,15 @@ function tagsComponent(tags){
 
 export function app({DOM, props}){
   // let state$ = Rx.Observable.from(props.tags) //, (tag) => li([tag]) ) //.mergeAll()
-  let props$ = Rx.Observable.just(props)
-  console.log(props$.map)
+  let props$ = Observable.just(props)
+  // console.log(props$.map)
   return {
     DOM: props$.map( ({tags, stats}) => {
-      return tagsComponent(tags)
+      let tagsView = tagsComponent(tags)
+      return <div>
+        <h1>Randomtag</h1>
+        <div>{ tagsView }</div>
+      </div>
     } )
     // tags$.map( (items) =>{
     //   console.log("====")
