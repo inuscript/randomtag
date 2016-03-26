@@ -4,6 +4,7 @@
     "stage-3"
   ],
   "plugins": [
-    ["transform-react-jsx", { "pragma": "hJSX" }]
+    "transform-react-jsx", { "pragma": "hJSX" }
+    "vidom-jsx"
   ]
 }

@@ -8,7 +8,6 @@ function tagComponent(tag){
 function tagsComponent(tags){
   return <div>{ tags.map( tag => tagComponent(tag) ) }</div>
 }
-function 
 
 export function app({DOM, props}){
   // let state$ = Rx.Observable.from(props.tags) //, (tag) => li([tag]) ) //.mergeAll()
