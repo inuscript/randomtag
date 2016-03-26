@@ -1,15 +1,17 @@
 import "babel-polyfill"
 import docReady from "doc-ready"
 // import { App } from "./view/index"
+// import { node , Component, mountToDom } from 'vidom/lib/vidom';
+
 import { main } from "./view/cycled"
 import calcTags from "./bandit/"
-import { node , Component, mountToDom } from 'vidom/lib/vidom';
 
 import Cycle from '@cycle/core';
 import { makeDOMDriver} from '@cycle/dom';
-import {tags, stats} from "./mock"
+import { tags, stats } from "./mock"
+
 docReady( function(){
-  Cycle.run(main, {DOM: makeDOMDriver('#container')})
+  main({tags, stats})
 
   // let container = document.getElementById('container')
   // let ts = calcTags().then( ({tags, stats}) => {
