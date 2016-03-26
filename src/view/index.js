@@ -7,17 +7,13 @@ class CopyButton extends Component{
   onRender({target}){
     let id = "__copy__button__"
     this.clipboard = new Clipboard(`#${id}`)
-    return node("button")
-      .attrs({
-        "id": id,
-        "data-clipboard-target": target
-      })
-      .children("Copy")
+    return <button id={id} data-clipboard-target={target} >Copy !</button>
   }
 }
 
 class Tag extends Component{
   onRender({tag, onClick}){
+    return <span className="tag-item" onClick={e => onClick(tag)}>{`#${tag}`}</span>
     return node("span").children(`#${tag} `).attrs({
       class: "tag-item",
       onClick: e => onClick(tag)
