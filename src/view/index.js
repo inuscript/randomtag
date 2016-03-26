@@ -13,33 +13,23 @@ class CopyButton extends Component{
 
 class Tag extends Component{
   onRender({tag, onClick}){
-    return <span className="tag-item" onClick={e => onClick(tag)}>{`#${tag}`}</span>
-    return node("span").children(`#${tag} `).attrs({
-      class: "tag-item",
-      onClick: e => onClick(tag)
-    })
+    // なぜか最後に空白が無いとcssが崩れる。謎。
+    return <span className="tag-item" onClick={e => onClick(tag)}>{`#${tag} `}</span>
   }
 }
 
 class Tags extends Component{
   onRender({ tags , onTagClick }){
-    return node("div")
-      .children(
-        tags.map( (tag) => {
-          return node(Tag).attrs({
-            tag,
-            onClick: e => onTagClick(tag)
-          })
-        })
-      )
+    return <div>{
+      tags.map(tag => <Tag tag={tag} onClick={e => onTagClick(tag) } />)
+    }</div>
   }
 }
 
 class CopyTags extends Component{
   onRender({ tags, id }){
-    return node("div")
-      .attrs({id, class: "copy-tag"})
-      .children(tags.map( (tag) => `#${tag}` ).join(" "))
+    let copyStrings = tags.map( (tag) => `#${tag}` ).join(" ")
+    return <div id={id} className="copy-tag">{copyStrings}</div>
   }
 }
 
@@ -48,11 +38,7 @@ class Links extends Component{
     let base = "https://github.com/inuscript/dogtag"
     let issue = `${base}/issues/new?body=${base}/edit/gh-pages/tags.txt`
     let edit = `${base}/edit/master/tags.txt`
-    return node("div")
-      .children([
-        node("a").attrs({href: issue}).children("Issue"),
-        node("a").attrs({href: edit}).children("Edit")
-      ])
+    return <div><a href={issue}>Issue</a><a href={edit}>Edit</a></div>
   }
 }
 class Row extends Component{
@@ -66,15 +52,13 @@ class Row extends Component{
     return round(num, 2)
   }
   onRender({className, label, count, expectation, ucb }){
-    return node("tr")
-      .attrs({class: className})
-      .children([
-        node("td").children(label),
-        node("td").children(count),
-        node("td").children(this.round(expectation)),
-        node("td").children(this.round(ucb)),
-        node("td").children(this.round(ucb - expectation))
-      ])
+    return <tr className={className}>
+      <td>{label}</td>
+      <td>{count}</td>
+      <td>{this.round(expectation)}</td>
+      <td>{this.round(ucb)}</td>
+      <td>{this.round(ucb - expectation)}</td>
+    </tr>
   }
 }
 class BanditStats extends Component{
@@ -88,7 +72,7 @@ class BanditStats extends Component{
       })
       return node(Row).attrs(attrs)
     })
-    return node("table").attrs({class: "badint-stats"}).children(rows)
+    return <table className="badint-stats">{rows}</table>
   }
 }
 
