@@ -5,7 +5,7 @@ import {makeDOMDriver, hJSX, h} from '@cycle/dom';
 import Clipboard from "clipboard"
 
 function Hashtag({DOM, tag}){
-  // const intent = DOM.select('.tag-item').events('click').map( )
+  const action$ = DOM.select('.tag-item').events('click').map( ev => tag )
   return {
     DOM: <span className="tag-item">{`#${tag} `}</span>
   }
