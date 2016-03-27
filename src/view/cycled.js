@@ -5,7 +5,7 @@ import {makeDOMDriver, hJSX, h} from '@cycle/dom';
 import Clipboard from "clipboard"
 
 function Hashtag({DOM, tag}){
-  const action$ = DOM.select('.tag-item').events('click').map( ev => tag )
+  const action = DOM.select('.tag-item').events('click').map( ev => tag )
   return {
     DOM: <span className="tag-item">{`#${tag} `}</span>
   }
@@ -41,9 +41,21 @@ export function app({DOM, props}){
   }
 }
 
+function test ({DOM, props}) {
+  const actions = {
+    clickTag$: DOM.select('.tag-item').events('click').map( ev => tag )
+  }
+  function model (actions) {
+    return 
+  }
+  return {
+    DOM: Observable.just("dog").map(tag => <span className="tag-item">{`#${tag} `}</span>)
+  }
+}
+
 export function main(obj){
   let driver = makeDOMDriver('#container')
-  Cycle.run(app, {
+  Cycle.run(test, {
     DOM: driver,
     props: () => {
       return obj
