@@ -21,7 +21,7 @@ function view (state$) {
 
 function HashTag ({DOM, tag}) {
   const actions = intent(DOM, tag)
-  const state$ = Observable.just(tag)
+  const state$ = actions.delete$.startWith(tag)
   const vtree$ = view(state$)
   return {
     DOM: vtree$,
