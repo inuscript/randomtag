@@ -1,18 +1,17 @@
-/** @jsx hJSX */
-import Rx, {Observable} from 'rx'
+import {Observable, Subject} from 'rx'
 import Cycle from '@cycle/core'
-import {makeDOMDriver, hJSX, h} from '@cycle/dom'
+import {makeDOMDriver, hJSX} from '@cycle/dom'
 import Clipboard from 'clipboard'
+import HashTag from './HashTag'
+import isolate from '@cycle/isolate'
 
-function Hashtag ({DOM, tag}) {
-  const action = DOM.select('.tag-item').events('click').map(ev => tag)
-  return {
-    DOM: <span className='tag-item'>{`#${tag} `}</span>
-  }
-}
 function HashTags ({DOM, tags}) {
+  let itemActions = { filter$: new Subject() }
+  let tagItems = tags.map(tag => isolate(HashTag)({DOM, tag, itemActions}))
+  let tagsView = tagItems.map(item => item.DOM)
+
   return {
-    DOM: <div>{ tags.map(tag => Hashtag({DOM, tag}).DOM) }</div>
+    DOM: <div>{ tagsView }</div>
   }
 }
 
@@ -43,7 +42,7 @@ export function app ({DOM, props}) {
 
 export function main (obj) {
   let driver = makeDOMDriver('#container')
-  Cycle.run(test, {
+  Cycle.run(app, {
     DOM: driver,
     props: () => {
       return obj

@@ -3,11 +3,12 @@ import docReady from 'doc-ready'
 // import { App } from "./view/index"
 // import { node , Component, mountToDom } from 'vidom/lib/vidom';
 
-import { main } from './view/cycled'
+// import { main } from './view/cycled'
+import { main } from './view/cy2'
 import calcTags from './bandit/'
 
 import Cycle from '@cycle/core'
-import { makeDOMDriver} from '@cycle/dom'
+// import { makeDOMDriver} from '@cycle/dom'
 import { tags, stats } from './mock'
 
 function startWithServer () {

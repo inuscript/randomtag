@@ -47,6 +47,7 @@
     "browserify": "^13.0.0",
     "budo": "^8.0.3",
     "eslint": "^2.5.1",
+    "eslint-config-cycle": "^3.2.0",
     "eslint-config-standard": "^5.1.0",
     "eslint-plugin-promise": "^1.1.0",
     "eslint-plugin-standard": "^1.3.2",
@@ -55,6 +56,7 @@
   "dependencies": {
     "@cycle/core": "^6.0.3",
     "@cycle/dom": "^9.2.2",
+    "@cycle/isolate": "^1.2.0",
     "@inuscript/dogtag": "^1.1.1",
     "@inuscript/to-zok": "^2.0.0",
     "axios": "^0.9.1",
@@ -68,6 +70,7 @@
     "firebase": "^2.4.0",
     "mathjs": "^2.7.0",
     "rx": "^4.1.0",
+    "rx-combine-latest-obj": "^1.0.2",
     "vidom": "^0.1.3"
   }
 }

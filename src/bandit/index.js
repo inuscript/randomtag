@@ -6,7 +6,7 @@ import normalize from '../lib/normalize'
 
 function fetchMedia () {
   let str = new Storage()
-  return str.media().then(_m => {
+  return str.media().then((_m) => {
     let media = _m.sort((a, b) => a.time < b.time)
     return media
   })
@@ -14,7 +14,7 @@ function fetchMedia () {
 
 function bandit (media, masterTags) {
   let tl = tagLikes(media)
-  let normalized = normalize(tl).map(r => {
+  let normalized = normalize(tl).map((r) => {
     return {
       tag: r.key,
       count: r.values
@@ -29,7 +29,7 @@ export default function (num = 25) {
     fetchMedia(), masterTag()
   ]).then(([media, tags]) => {
     return bandit(media, tags)
-  }).then(bandit => {
+  }).then((bandit) => {
     let result = bandit.serialize()
     let tags = result.concat().map(v => v.label)
     return {
