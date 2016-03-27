@@ -1,6 +1,6 @@
-// import "babel-polyfill"
-import test from "ava"
-import normalize from "../src/lib/normalize"
+// import 'babel-polyfill'
+import test from 'ava'
+import normalize from '../src/lib/normalize'
 
 test((t) => {
   let input = {

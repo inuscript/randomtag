@@ -1,11 +1,11 @@
-import Clipboard from "clipboard"
-import { node , Component, mountToDom } from 'vidom/lib/vidom';
-import { round } from "mathjs"
-import cx from "classnames"
+import Clipboard from 'clipboard'
+import { node, Component, mountToDom } from 'vidom/lib/vidom'
+import { round } from 'mathjs'
+import cx from 'classnames'
 
-class CopyButton extends Component{
-  onRender({target}){
-    let id = "__copy__button__"
+class CopyButton extends Component {
+  onRender ({target}) {
+    let id = '__copy__button__'
     this.clipboard = new Clipboard(`#${id}`)
     return <button id={id} data-clipboard-target={target} >Copy !</button>
   }
@@ -33,21 +33,21 @@ class CopyTags extends Component{
   }
 }
 
-class Links extends Component{
-  onRender(){
-    let base = "https://github.com/inuscript/dogtag"
+class Links extends Component {
+  onRender () {
+    let base = 'https://github.com/inuscript/dogtag'
     let issue = `${base}/issues/new?body=${base}/edit/gh-pages/tags.txt`
     let edit = `${base}/edit/master/tags.txt`
     return <div><a href={issue}>Issue</a><a href={edit}>Edit</a></div>
   }
 }
-class Row extends Component{
-  round(num){
-    if(isNaN(num)){
-      return "-"
+class Row extends Component {
+  round (num) {
+    if (isNaN(num)) {
+      return '-'
     }
-    if(num === Number.POSITIVE_INFINITY){
-      return "Infinity"
+    if (num === Number.POSITIVE_INFINITY) {
+      return 'Infinity'
     }
     return round(num, 2)
   }
@@ -61,14 +61,14 @@ class Row extends Component{
     </tr>
   }
 }
-class BanditStats extends Component{
-  onRender({stats, tags}){
-    let rows = stats.map( st => {
+class BanditStats extends Component {
+  onRender ({stats, tags}) {
+    let rows = stats.map(st => {
       let isActive = tags.indexOf(st.label) > -1
-      let attrs = st 
-      attrs["className"] = cx({
-        "tag-row": true,
-        "active": isActive
+      let attrs = st
+      attrs['className'] = cx({
+        'tag-row': true,
+        'active': isActive
       })
       return node(Row).attrs(attrs)
     })
@@ -76,33 +76,33 @@ class BanditStats extends Component{
   }
 }
 
-export class App extends Component{
-  get tags(){
-    return this.allTags.filter( t => {
+export class App extends Component {
+  get tags () {
+    return this.allTags.filter(t => {
       return !this.rejected[t]
     }).splice(0, 25)
   }
-  onInit(){
+  onInit () {
     this.allTags = []
     this.rejected = {}
   }
-  onTagClick(tag){
-    if(this.rejected[tag]){
+  onTagClick (tag) {
+    if (this.rejected[tag]) {
       this.rejected[tag] = 0
-    }else{
+    } else {
       this.rejected[tag] = 1
     }
     this.update()
   }
-  onRender({tags, stats}){
-    let tagsId = "__tags"
+  onRender ({tags, stats}) {
+    let tagsId = '__tags'
     this.allTags = tags
-    return node("div")
+    return node('div')
       .children([
         node(CopyButton).attrs({ target: `#${tagsId}` }),
-        node(Tags).attrs({ 
-          tags: this.tags, 
-          onTagClick: tag => this.onTagClick(tag)
+        node(Tags).attrs({
+          tags: this.tags,
+          onTagClick: (tag) => this.onTagClick(tag)
         }),
         node(CopyTags).attrs({ tags: this.tags, id:tagsId }),
         node(Links),
