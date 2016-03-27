@@ -11,25 +11,25 @@ class CopyButton extends Component {
   }
 }
 
-class Tag extends Component{
-  onRender({tag, onClick}){
+class Tag extends Component {
+  onRender ({tag, onClick}) {
     // なぜか最後に空白が無いとcssが崩れる。謎。
-    return <span className="tag-item" onClick={e => onClick(tag)}>{`#${tag} `}</span>
+    return <span className='tag-item' onClick={e => onClick(tag)}>{`#${tag} `}</span>
   }
 }
 
-class Tags extends Component{
-  onRender({ tags , onTagClick }){
+class Tags extends Component {
+  onRender ({ tags, onTagClick }) {
     return <div>{
       tags.map(tag => <Tag tag={tag} onClick={e => onTagClick(tag) } />)
     }</div>
   }
 }
 
-class CopyTags extends Component{
-  onRender({ tags, id }){
-    let copyStrings = tags.map( (tag) => `#${tag}` ).join(" ")
-    return <div id={id} className="copy-tag">{copyStrings}</div>
+class CopyTags extends Component {
+  onRender ({ tags, id }) {
+    let copyStrings = tags.map((tag) => `#${tag}`).join(' ')
+    return <div id={id} className='copy-tag'>{copyStrings}</div>
   }
 }
 
@@ -51,7 +51,7 @@ class Row extends Component {
     }
     return round(num, 2)
   }
-  onRender({className, label, count, expectation, ucb }){
+  onRender ({className, label, count, expectation, ucb }) {
     return <tr className={className}>
       <td>{label}</td>
       <td>{count}</td>
@@ -72,7 +72,7 @@ class BanditStats extends Component {
       })
       return node(Row).attrs(attrs)
     })
-    return <table className="badint-stats">{rows}</table>
+    return <table className='badint-stats'>{rows}</table>
   }
 }
 
