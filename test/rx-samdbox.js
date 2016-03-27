@@ -1,6 +1,6 @@
-import Rx from "rx"
-import test from "ava"
+import Rx from 'rx'
+import test from 'ava'
 
-test( (t) => {
+test((t) => {
   t.ok(true)
 })
