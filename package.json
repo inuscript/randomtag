@@ -8,7 +8,7 @@
     "build": "browserify -e src/index.js -o build/index.js",
     "budo": "budo src/index.js:build/index.js",
     "lint": "eslint --fix src test",
-    "_test": "mocha --compilers js:babel-register ",
+    "mocha": "mocha mocha",
     "test": "ava",
     "test:check": "npm run test ; npm run diff-check",
     "cli": "babel-node cli.js"
