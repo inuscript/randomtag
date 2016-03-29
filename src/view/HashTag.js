@@ -5,7 +5,7 @@ import combineLatestObj from 'rx-combine-latest-obj'
 function intent (DOM, tag) {
   return {
     delete$: DOM.select('.tag-item').events('click').map(ev => {
-      console.log(ev)
+      console.log(tag)
       return tag
     })
     // .map((ev) => {
@@ -16,7 +16,7 @@ function intent (DOM, tag) {
 }
 
 function view (state$) {
-  return state$.map((tag) => <div><button className='tag-item'>{`#${tag} `}</button></div>)
+  return state$.map((tag) => <span className='tag-item'>{`#${tag} `}</span>)
 }
 
 function HashTag ({DOM, tag}) {
