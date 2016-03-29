@@ -6,7 +6,7 @@ function intent (DOM, tag) {
   return {
     delete$: DOM.select('.tag-item').events('click').map(ev => {
       console.log(tag)
-      return tag
+      return {tag: false}
     })
     // .map((ev) => {
     //   cosnole.log(tag)

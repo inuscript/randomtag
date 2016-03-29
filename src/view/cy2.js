@@ -14,13 +14,14 @@ function hashTagWrapper (DOM, tag) {
 function app ({DOM}) {
   let listActions = {remove$: new Subject()}
   let ht = hashTagWrapper(DOM, 'dog')
-  let ht2 = hashTagWrapper(DOM, 'norfolkterrier')
-  let hashTags = [ht, ht2]
-  let doms = hashTags.map((ht) => ht.DOM)
+  // let ht2 = hashTagWrapper(DOM, 'norfolkterrier')
+  // let hashTags = [ht, ht2]
+  // let doms = hashTags.map((ht) => ht.DOM)
   // let state$ = Observable.startWith(hashTags)
   // let doms = [ht.DOM, ht2.DOM]
   return {
-    DOM: Observable.just(true).map((_) => <div>{doms}</div>)
+    DOM: ht.DOM
+    // Observable.just(true).map((_) => <div>{doms}</div>)
   }
 }
 export function main (obj) {
