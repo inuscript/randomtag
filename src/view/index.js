@@ -97,16 +97,14 @@ export class App extends Component {
   onRender ({tags, stats}) {
     let tagsId = '__tags'
     this.allTags = tags
-    return node('div')
-      .children([
-        node(CopyButton).attrs({ target: `#${tagsId}` }),
-        node(Tags).attrs({
-          tags: this.tags,
-          onTagClick: tag => this.onTagClick(tag)
-        }),
-        node(CopyTags).attrs({ tags: this.tags, id: tagsId }),
-        node(Links),
-        node(BanditStats).attrs({ stats, tags: this.tags })
-      ])
+    return (
+      <div>
+        <CopyButton target={`#${tagsId}`} />
+        <Tags tags={this.tags} onTagClick={ (tag) => this.onTagClick(tag) } />
+        <CopyTags tags={this.tags} id={tagsId} />
+        <Links />
+        <BanditStats stats={stats} tags={this.tags} />
+      </div>
+    )
   }
 }
