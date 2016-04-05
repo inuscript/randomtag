@@ -1,5 +1,5 @@
 import Clipboard from 'clipboard'
-import { node, Component, mountToDom } from 'vidom/lib/vidom'
+import { node, Component } from 'vidom/lib/vidom'
 import { round } from 'mathjs'
 import cx from 'classnames'
 
