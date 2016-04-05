@@ -2,7 +2,7 @@ module.exports = {
     // "env": {
     //     "jsx": true
     // },
-    "extends": "eslint:recommended",
+    "extends": "standard",
     "ecmaFeatures": {
         jsx: true
     },
