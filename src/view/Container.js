@@ -1,4 +1,4 @@
-import calcTags from '../bandit/'
+import calcBandit from '../bandit/'
 import { App } from './index'
 import { Component } from 'vidom/lib/vidom'
 
@@ -6,7 +6,7 @@ export default class Container extends Component{
   onInit() {
     this.tags = null
     this.stats = null
-    calcTags(25, 170).then(({tags, stats}) => {
+    calcBandit(25, 170).then(({tags, stats}) => {
       this.tags = tags
       this.stats = stats
       this.update()

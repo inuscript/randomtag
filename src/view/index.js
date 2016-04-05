@@ -12,9 +12,11 @@ class CopyButton extends Component {
 }
 
 class Tag extends Component {
-  onRender ({tag, onClick}) {
+  onRender ({tag, onClick, tagLabel}) {
     // なぜか最後に空白が無いとcssが崩れる。謎。
-    return <span className='tag-item' onClick={ () => onClick(tag)}>{`#${tag} `}</span>
+    return <span className='tag-item' onClick={ () => onClick(tag)}>
+      <span className='tag-label'>{`#${tag} `}</span>
+    </span>
   }
 }
 

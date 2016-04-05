@@ -12,7 +12,7 @@ function fetchMedia () {
   })
 }
 
-function bandit (media, masterTags, threshold) {
+function bandit (media, masterTags, threshold, repeat) {
   let tl = tagLikes(media)
   let normalized = normalize(tl, threshold).map(r => {
     return {
@@ -20,20 +20,27 @@ function bandit (media, masterTags, threshold) {
       count: r.values
     }
   })
-  return calcBandit(masterTags, normalized)
+  return calcBandit(masterTags, normalized, repeat)
 }
 
-export default function (num = 25, threshold = null) {
-  console.debug('use bandit logic')
+export default function (num = 25, threshold = null, repeat = 20) {
+  // console.debug('use bandit logic')
   return Promise.all([
     fetchMedia(), masterTag()
   ]).then(([media, tags]) => {
-    return bandit(media, tags, threshold)
+    return bandit(media, tags, threshold, repeat)
   }).then(bandit => {
     let result = bandit.serialize()
-    let tags = result.concat().map( v => v.label )
+    let tags = result.concat().map( v => v.label)
+    let tagLabels = result.concat().map( v => {
+      return {
+        label : v.label,
+        num : v.count / repeat
+      }
+    })
     return {
       tags: primaryTag.concat(tags),
+      tagLabels: tagLabels,
       stats: result,
       n: bandit.n
     }
