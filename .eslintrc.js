@@ -10,6 +10,7 @@ module.exports = {
         "standard"
     ],
     "rules": {
-        "semi": ["error", "never"]
+        "semi": ["error", "never"],
+        "arrow-parens": ["off"]
     }
 };
