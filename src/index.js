@@ -4,12 +4,27 @@ import { App } from './view/index'
 import calcTags from './bandit/'
 import { node, Component, mountToDom } from 'vidom/lib/vidom'
 
+class Container extends Component{
+  onInit() {
+    this.tags = null
+    this.stats = null
+    calcTags().then(({tags, stats}) => {
+      this.tags = tags
+      this.stats = stats
+      this.update()
+    }).catch(e => {
+      console.trace(e)
+    })
+  }
+  onRender () {
+    if(this.tags && this.stats){
+      return <App tags={this.tags} stats={this.stats} />
+    }
+    return <div>Loading...</div>
+  }
+}
+
 docReady(function () {
   let container = document.getElementById('container')
-  let ts = calcTags().then(({tags, stats}) => {
-    container.innerHTML = '' // clean
-    mountToDom(container, node(App).attrs({tags, stats}))
-  }).catch(e => {
-    console.error(e)
-  })
+  mountToDom(container, node(Container))
 })

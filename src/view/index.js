@@ -14,14 +14,14 @@ class CopyButton extends Component {
 class Tag extends Component {
   onRender ({tag, onClick}) {
     // なぜか最後に空白が無いとcssが崩れる。謎。
-    return <span className='tag-item' onClick={e => onClick(tag)}>{`#${tag} `}</span>
+    return <span className='tag-item' onClick={ () => onClick(tag)}>{`#${tag} `}</span>
   }
 }
 
 class Tags extends Component {
   onRender ({ tags, onTagClick }) {
     return <div>{
-      tags.map(tag => <Tag tag={tag} onClick={e => onTagClick(tag) } />)
+      tags.map(tag => <Tag tag={tag} onClick={ () => onTagClick(tag) } />)
     }</div>
   }
 }
@@ -104,9 +104,9 @@ export class App extends Component {
           tags: this.tags,
           onTagClick: tag => this.onTagClick(tag)
         }),
-        node(CopyTags).attrs({ tags: this.tags, id:tagsId }),
+        node(CopyTags).attrs({ tags: this.tags, id: tagsId }),
         node(Links),
-        node(BanditStats).attrs({ stats, tags: this.tags }),
+        node(BanditStats).attrs({ stats, tags: this.tags })
       ])
   }
 }
