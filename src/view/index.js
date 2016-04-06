@@ -103,7 +103,7 @@ export class App extends Component {
     } else {
       this.rejected[tag] = 1
     }
-    this.update()
+    this.forceUpdate() // TODO
   }
   render () {
     let {tags, stats} = this.props
