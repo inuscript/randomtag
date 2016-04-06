@@ -32,7 +32,7 @@ export default class BanditStats extends Component {
       let attrs = st
       attrs['className'] = cx({
         'tag-row': true,
-        'active': isActive,
+        'active': isActive
       })
       attrs.key = i
       return <Row {...attrs} />
