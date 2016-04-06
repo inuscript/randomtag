@@ -1,17 +1,19 @@
 module.exports = {
-    // "env": {
-    //     "jsx": true
-    // },
+    "env": {
+        "node": true,
+        "browser": true,
+    },
     "extends": "eslint:recommended",
     "parserOptions": {
         "ecmaVersion": 6,
-        "ecmaFeatures": {
-            jsx: true
-        },
         "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
     },
     "plugins": [
-        "standard"
+        "standard",
+        "react"
     ],
     "rules": {
         "semi": ["error", "never"],

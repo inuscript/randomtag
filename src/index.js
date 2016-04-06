@@ -1,8 +1,11 @@
 import 'babel-polyfill'
 import docReady from 'doc-ready'
-import { node, mountToDom } from 'vidom/lib/vidom'
 import Container from './view/Container'
+import React from 'react'
+import ReactDOM from 'react-dom'
+
 docReady(function () {
-  let container = document.getElementById('container')
-  mountToDom(container, node(Container))
+  let cnt = document.getElementById('container')
+  let cmp = <Container />
+  ReactDOM.render(cmp, cnt)
 })

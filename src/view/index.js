@@ -1,10 +1,11 @@
 import Clipboard from 'clipboard'
-import { node, Component } from 'vidom/lib/vidom'
+import React, { Component } from 'react'
 import { round } from 'mathjs'
 import cx from 'classnames'
 
 class CopyButton extends Component {
-  onRender ({target}) {
+  render () {
+    let {target} = this.props
     let id = '__copy__button__'
     this.clipboard = new Clipboard(`#${id}`)
     return <button id={id} data-clipboard-target={target} >Copy !</button>
@@ -12,7 +13,8 @@ class CopyButton extends Component {
 }
 
 class Tag extends Component {
-  onRender ({tag, onClick, tagLabel}) {
+  render () {
+    let {tag, onClick, tagLabel} = this.props
     // なぜか最後に空白が無いとcssが崩れる。謎。
     return <span className='tag-item' onClick={ () => onClick(tag)}>
       <span className='tag-label'>{`#${tag} `}</span>
@@ -21,22 +23,24 @@ class Tag extends Component {
 }
 
 class Tags extends Component {
-  onRender ({ tags, onTagClick }) {
+  render () {
+    let { tags, onTagClick } = this.props
     return <div>{
-      tags.map(tag => <Tag tag={tag} onClick={ () => onTagClick(tag) } />)
+      tags.map((tag,i) => <Tag key={i} tag={tag} onClick={ () => onTagClick(tag) } />)
     }</div>
   }
 }
 
 class CopyTags extends Component {
-  onRender ({ tags, id }) {
+  render () {
+    let { tags, id } = this.props
     let copyStrings = tags.map((tag) => `#${tag}`).join(' ')
     return <div id={id} className='copy-tag'>{copyStrings}</div>
   }
 }
 
 class Links extends Component {
-  onRender () {
+  render () {
     let base = 'https://github.com/inuscript/dogtag'
     let issue = `${base}/issues/new?body=${base}/edit/gh-pages/tags.txt`
     let edit = `${base}/edit/master/tags.txt`
@@ -53,7 +57,8 @@ class Row extends Component {
     }
     return round(num, 2)
   }
-  onRender ({className, label, count, expectation, ucb }) {
+  render () {
+    let {className, label, count, expectation, ucb} = this.props
     return <tr className={className}>
       <td>{label}</td>
       <td>{count}</td>
@@ -63,18 +68,21 @@ class Row extends Component {
     </tr>
   }
 }
+
 class BanditStats extends Component {
-  onRender ({stats, tags}) {
-    let rows = stats.map(st => {
+  render () {
+    let {tags, stats} = this.props
+    let rows = stats.map((st, i) => {
       let isActive = tags.indexOf(st.label) > -1
       let attrs = st
       attrs['className'] = cx({
         'tag-row': true,
-        'active': isActive
+        'active': isActive,
       })
-      return node(Row).attrs(attrs)
+      attrs.key = i
+      return <Row {...attrs} />
     })
-    return <table className='badint-stats'>{rows}</table>
+    return <table className='badint-stats'><tbody>{rows}</tbody></table>
   }
 }
 
@@ -84,7 +92,8 @@ export class App extends Component {
       return !this.rejected[t]
     }).splice(0, 25)
   }
-  onInit () {
+  constructor (props) {
+    super(props)
     this.allTags = []
     this.rejected = {}
   }
@@ -96,7 +105,8 @@ export class App extends Component {
     }
     this.update()
   }
-  onRender ({tags, stats}) {
+  render () {
+    let {tags, stats} = this.props
     let tagsId = '__tags'
     this.allTags = tags
     return (

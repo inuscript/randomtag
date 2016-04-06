@@ -1,9 +1,7 @@
 {
   "presets": [
     "es2015",
-    "stage-3"
-  ],
-  "plugins": [
-    "vidom-jsx"
+    "stage-3",
+    "react"
   ]
 }
