@@ -1,16 +1,7 @@
-import Clipboard from 'clipboard'
 import React, { Component } from 'react'
 import { round } from 'mathjs'
+import Copy from 'app/view/Copy'
 import cx from 'classnames'
-
-class CopyButton extends Component {
-  render () {
-    let {target} = this.props
-    let id = '__copy__button__'
-    this.clipboard = new Clipboard(`#${id}`)
-    return <button id={id} data-clipboard-target={target} >Copy !</button>
-  }
-}
 
 class Tag extends Component {
   render () {
@@ -28,14 +19,6 @@ class Tags extends Component {
     return <div>{
       tags.map((tag,i) => <Tag key={i} tag={tag} onClick={ () => onTagClick(tag) } />)
     }</div>
-  }
-}
-
-class CopyTags extends Component {
-  render () {
-    let { tags, id } = this.props
-    let copyStrings = tags.map((tag) => `#${tag}`).join(' ')
-    return <div id={id} className='copy-tag'>{copyStrings}</div>
   }
 }
 
@@ -107,13 +90,11 @@ export class App extends Component {
   }
   render () {
     let {tags, stats} = this.props
-    let tagsId = '__tags'
     this.allTags = tags
     return (
       <div>
-        <CopyButton target={`#${tagsId}`} />
+        <Copy tags={this.tags} />
         <Tags tags={this.tags} onTagClick={ (tag) => this.onTagClick(tag) } />
-        <CopyTags tags={this.tags} id={tagsId} />
         <Links />
         <BanditStats stats={stats} tags={this.tags} />
       </div>
