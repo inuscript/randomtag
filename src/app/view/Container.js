@@ -1,5 +1,5 @@
 import buildBandit from 'lib/bandit/'
-import { App } from 'app/view/index'
+import { App } from 'app/view/App'
 import React, { Component } from 'react'
 
 export default class Container extends Component{
