@@ -9,7 +9,7 @@ module.exports = {
         "sourceType": "module",
         "ecmaFeatures": {
             "jsx": true
-        }
+        },
     },
     "plugins": [
         "standard",

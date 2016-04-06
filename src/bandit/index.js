@@ -8,21 +8,19 @@ function repeatArray(item, num){
   }, [])
 }
 
-export default class Bandit {
-  constructor() {
+class Bandit {
+  constructor({media, tags, primaryTags}) {
     this.num = 25
     this.repeat = 20
     this.threshold = null
+    this.media = media
+    this.tags = tags
+    this.primaryTags = primaryTags
   }
-  execute(){
-    return fetchData().then( ([media, tags, primaryTags]) => 
-      this.calc(media, tags, primaryTags) 
-    )
-  }
-  calc(media, tags, primaryTags){
+  calc(){
     // TODO きたない
-    let bandit = this.bandit(media, tags)
-    return this.result(bandit, primaryTags)
+    let bandit = this.bandit(this.media, this.tags)
+    return this.result(bandit, this.primaryTags)
   }
   result(bandit, primaryTags){
     let result = bandit.serialize()
@@ -62,3 +60,8 @@ export default class Bandit {
   }
 }
 
+export default function build(){
+  return fetchData().then( ([media, tags, primaryTags]) => {
+    return new Bandit({media, tags, primaryTags})
+  })
+}

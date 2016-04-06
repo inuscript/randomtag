@@ -1,20 +1,20 @@
 import calcBandit from '../bandit/'
-import Bandit from '../bandit/'
+import buildBandit from '../bandit/'
 import { App } from './index'
 import React, { Component } from 'react'
 
 export default class Container extends Component{
   componentDidMount() {
-    new Bandit(25, 170).execute().then(({tags, stats}) => {
+    buildBandit().then(bandit => {
+      bandit.num = 25
+      bandit.threshold = 170
+      let {tags, stats} = bandit.calc()
       let next = {
         tags: tags,
         stats: stats
       }
       this.setState(next)
     })
-    // .catch(e => {
-    //   console.error(e)
-    // })
   }
   constructor(props) {
     super(props)
