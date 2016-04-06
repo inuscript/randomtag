@@ -62,6 +62,8 @@
     "envify": "^3.4.0",
     "eslint-plugin-react": "^4.2.3",
     "firebase": "^2.4.0",
-    "mathjs": "^2.7.0"
+    "mathjs": "^2.7.0",
+    "react-redux": "^4.4.1",
+    "redux": "^3.3.1"
   }
 }
