@@ -1,5 +1,5 @@
 import calcBandit from '../bandit/'
-import Bandit from '../bandit/instance'
+import Bandit from '../bandit/'
 import { App } from './index'
 import React, { Component } from 'react'
 

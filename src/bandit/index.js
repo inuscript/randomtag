@@ -1,62 +1,64 @@
-import Storage from '../storage/firebase'
-import masterTag, { primary as primaryTag } from '@inuscript/dogtag'
 import calcBandit from './calc'
 import tagLikes from '../storage/tagLikes'
-import normalize from '../lib/normalize'
+import fetchData from "./fetch"
 
-function fetchMedia () {
-  let str = new Storage()
-  return str.media().then((m) => {
-    let media = m.sort((a, b) => a.time < b.time)
-    return media
-  })
+function repeatArray(item, num){
+  return new Array(num).fill('_').reduce( (curr) => {
+    return curr.concat(item)
+  }, [])
 }
 
-function bandit (media, masterTags, threshold, repeat) {
-  let tl = tagLikes(media)
-  let normalized = normalize(tl, threshold).map(r => {
-    return {
-      tag: r.key,
-      count: r.values
-    }
-  })
-  return calcBandit(masterTags, normalized, repeat)
-}
-
-export function fetchData(){
-  return Promise.all([
-    fetchMedia(), masterTag()
-  ])
-}
-export class Bandit {
+export default class Bandit {
   constructor() {
     this.num = 25
     this.repeat = 20
     this.threshold = null
   }
-  calc(){
-    
+  execute(){
+    return fetchData().then( ([media, tags, primaryTags]) => 
+      this.calc(media, tags, primaryTags) 
+    )
   }
-}
-
-export default function (num = 25, threshold = null, repeat = 20) {
-  // console.debug('use bandit logic')
-  return fetchData().then(([media, tags]) => {
-    return bandit(media, tags, threshold, repeat)
-  }).then(bandit => {
+  calc(media, tags, primaryTags){
+    // TODO きたない
+    let bandit = this.bandit(media, tags)
+    return this.result(bandit, primaryTags)
+  }
+  result(bandit, primaryTags){
     let result = bandit.serialize()
     let tags = result.concat().map( v => v.label)
-    let tagLabels = result.concat().map( v => {
+    let primaries = primaryTags.map( (tag) => {
+      return { label: tag }
+    })
+    let tagLabels = result.concat(primaries).map( v => {
       return {
         label : v.label,
-        num : v.count / repeat
+        num : v.count / this.repeat
       }
     })
     return {
-      tags: primaryTag.concat(tags),
+      tags: primaryTags.concat(tags),
       tagLabels: tagLabels,
       stats: result,
       n: bandit.n
     }
-  })
+  }
+  normalize (countsObj) {
+    return Object.entries(countsObj).map(([key, counts]) => {
+      let values = counts.map((c) =>  c > this.threshold ? 1 : 0)
+      return { key, values }
+    })
+  }
+
+  bandit (media, masterTags) {
+    let tl = tagLikes(media)
+    let normalized = this.normalize(tl).map(r => {
+      return {
+        tag: r.key,
+        count: repeatArray(r.values, this.repeat)
+      }
+    })
+    return calcBandit(masterTags, normalized)
+  }
 }
+
