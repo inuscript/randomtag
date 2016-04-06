@@ -1,4 +1,4 @@
-import Storage from '../storage/firebase'
+import Storage from 'lib/storage/firebase'
 import masterTag, { primary } from '@inuscript/dogtag'
 
 function fetchMedia () {

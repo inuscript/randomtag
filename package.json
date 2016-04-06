@@ -5,8 +5,8 @@
   "main": "random.js",
   "scripts": {
     "start": "npm run budo",
-    "build": "browserify -e src/index.js -o build/index.js",
-    "budo": "budo src/index.js:build/index.js",
+    "build": "NODE_PATH=src/ browserify -e src/index.js -o build/index.js",
+    "budo": "NODE_PATH=src/ budo src/index.js:build/index.js",
     "lint": "eslint --fix src test",
     "test": "ava",
     "test:check": "npm run test ; npm run diff-check",

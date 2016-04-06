@@ -1,5 +1,5 @@
 import calcBandit from './calc'
-import tagLikes from '../storage/tagLikes'
+import tagLikes from 'lib/bandit/tagLikes'
 import fetchData from "./fetch"
 
 function repeatArray(item, num){
