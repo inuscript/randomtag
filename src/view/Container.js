@@ -1,10 +1,11 @@
 import calcBandit from '../bandit/'
+import Bandit from '../bandit/instance'
 import { App } from './index'
 import React, { Component } from 'react'
 
 export default class Container extends Component{
   componentDidMount() {
-    calcBandit(25, 170).then(({tags, stats}) => {
+    new Bandit(25, 170).execute().then(({tags, stats}) => {
       let next = {
         tags: tags,
         stats: stats

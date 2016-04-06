@@ -23,11 +23,25 @@ function bandit (media, masterTags, threshold, repeat) {
   return calcBandit(masterTags, normalized, repeat)
 }
 
-export default function (num = 25, threshold = null, repeat = 20) {
-  // console.debug('use bandit logic')
+export function fetchData(){
   return Promise.all([
     fetchMedia(), masterTag()
-  ]).then(([media, tags]) => {
+  ])
+}
+export class Bandit {
+  constructor() {
+    this.num = 25
+    this.repeat = 20
+    this.threshold = null
+  }
+  calc(){
+    
+  }
+}
+
+export default function (num = 25, threshold = null, repeat = 20) {
+  // console.debug('use bandit logic')
+  return fetchData().then(([media, tags]) => {
     return bandit(media, tags, threshold, repeat)
   }).then(bandit => {
     let result = bandit.serialize()
