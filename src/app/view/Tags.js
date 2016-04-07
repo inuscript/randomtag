@@ -1,20 +1,20 @@
 import React, { Component } from 'react'
+import { round } from 'mathjs'
 
-class Tag extends Component {
-  render () {
-    let {tag, onClick, tagLabel} = this.props
-    // なぜか最後に空白が無いとcssが崩れる。謎。
-    return <span className='tag-item' onClick={ () => onClick(tag)}>
-      <span className='tag-label'>{`#${tag} `}</span>
-    </span>
-  }
+const Tag = ({tagLabel, onClick}) => {
+  // なぜか最後に空白が無いとcssが崩れる。謎。
+  let {label, num, exp} = tagLabel
+  let msg = `#${label}(${num} : ${round(exp, 2) })`
+  return <span className='tag-item' onClick={onClick}>
+    <span className='tag-label'>{msg}</span>
+  </span>
 }
 
 export default class Tags extends Component {
   render () {
-    let { tags, onTagClick } = this.props
+    let {  onTagClick, tagLabels } = this.props
     return <div>{
-      tags.map((tag,i) => <Tag key={i} tag={tag} onClick={ () => onTagClick(tag) } />)
+      tagLabels.map((t,i) => <Tag key={i} tagLabel={t} onClick={ () => onTagClick(t.label) } />)
     }</div>
   }
 }

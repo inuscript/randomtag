@@ -65,6 +65,7 @@
     "firebase": "^2.4.0",
     "mathjs": "^2.7.0",
     "react-redux": "^4.4.1",
+    "recompose": "^0.15.1",
     "redux": "^3.3.1"
   }
 }

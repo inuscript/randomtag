@@ -5,6 +5,9 @@ import Links from 'app/view/Links'
 import Tags from 'app/view/Tags'
 
 export class App extends Component {
+  get allTags () {
+    return this.props.tags
+  }
   get tags () {
     return this.allTags.filter(t => {
       return !this.rejected[t]
@@ -12,7 +15,6 @@ export class App extends Component {
   }
   constructor (props) {
     super(props)
-    this.allTags = []
     this.rejected = {}
   }
   onTagClick (tag) {
@@ -24,12 +26,12 @@ export class App extends Component {
     this.forceUpdate() // TODO
   }
   render () {
-    let {tags, stats} = this.props
-    this.allTags = tags
+    let {tagLabels, stats} = this.props
+    // console.log(tagLabels)
     return (
       <div>
         <Copy tags={this.tags} />
-        <Tags tags={this.tags} onTagClick={ (tag) => this.onTagClick(tag) } />
+        <Tags tags={this.tags} tagLabels={tagLabels} onTagClick={ (tag) => this.onTagClick(tag) } />
         <Links />
         <StatTable stats={stats} tags={this.tags} />
       </div>

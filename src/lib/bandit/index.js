@@ -28,10 +28,11 @@ class Bandit {
     let primaries = primaryTags.map( (tag) => {
       return { label: tag }
     })
-    let tagLabels = result.concat(primaries).map( v => {
+    let tagLabels = primaries.concat(result).map( ({label, count, expectation}) => {
       return {
-        label : v.label,
-        num : v.count / this.repeat
+        label,
+        exp: expectation,
+        num: (count / this.repeat)
       }
     })
     return {
