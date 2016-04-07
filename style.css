@@ -21,6 +21,7 @@ textarea{
   -webkit-user-select: all;
 }
 .tag-item{
+  font-size: 12px;
   cursor: pointer;
   margin: 0.3em;
   line-height: 2em;
@@ -31,15 +32,15 @@ textarea{
 }
 .tag-label{
   font-weight: bold;
-  font-size: 14px;
+  font-size: 12px;
 }
 .tag-num{
-  font-size: 12px;
-  padding: 0 0.5em;
+  font-size: 10px;
+  padding: 0 0.2em;
 }
 .tag-exp{
-  font-size: 12px;
-  padding: 0 0.5em;
+  font-size: 10px;
+  padding: 0 0.2em;
 
 }
 .tag-row.active{
