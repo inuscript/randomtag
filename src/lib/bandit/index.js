@@ -37,7 +37,7 @@ class Bandit {
     })
     return {
       tags: primaryTags.concat(tags),
-      tagLabels: tagLabels,
+      hashTags: tagLabels,
       stats: result,
       n: bandit.n
     }

@@ -7,10 +7,10 @@ export default class Container extends Component{
     buildBandit().then(bandit => {
       bandit.num = 25
       bandit.threshold = 170
-      let {tags, tagLabels, stats} = bandit.calc()
+      let {tags, hashTags, stats} = bandit.calc()
       let next = {
         tags,
-        tagLabels,
+        hashTags,
         stats
       }
       this.setState(next)

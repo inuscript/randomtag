@@ -6,12 +6,21 @@ import Tags from 'app/view/Tags'
 
 export class App extends Component {
   get allTags () {
-    return this.props.tags
+    return this.props.hashTags.map(ht => {
+      return ht.label
+    })
   }
-  get tags () {
+  get selectedTags () {
     return this.allTags.filter(t => {
       return !this.rejected[t]
     }).splice(0, 25)
+  }
+  get hashTags(){
+    return this.props.hashTags.map( ht => {
+      return Object.assign({}, ht, {
+        selected: this.selectedTags.indexOf(ht.label) > -1
+      })
+    })
   }
   constructor (props) {
     super(props)
@@ -26,14 +35,15 @@ export class App extends Component {
     this.forceUpdate() // TODO
   }
   render () {
-    let {tagLabels, stats} = this.props
-    // console.log(tagLabels)
+    let {stats} = this.props
     return (
       <div>
-        <Copy tags={this.tags} />
-        <Tags tags={this.tags} tagLabels={tagLabels} onTagClick={ (tag) => this.onTagClick(tag) } />
+        <Copy tags={this.selectedTags} />
+        <Tags selectedTags={this.selectedTags} 
+          hashTags={this.hashTags} 
+          onTagClick={ (tag) => this.onTagClick(tag) } />
         <Links />
-        <StatTable stats={stats} tags={this.tags} />
+        <StatTable stats={stats} tags={this.selectedTags} />
       </div>
     )
   }
