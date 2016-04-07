@@ -12,9 +12,10 @@ function r(num){
 const Tag = ({tagLabel, onClick}) => {
   // なぜか最後に空白が無いとcssが崩れる。謎。
   let {label, num, exp} = tagLabel
-  let msg = `#${label}(${num} : ${r(exp) })`
   return <span className='tag-item' onClick={onClick}>
-    <span className='tag-label'>{msg}</span>
+    <span className='tag-label'>{`#${label}`}</span>
+    <span className='tag-num'>{num}</span>
+    <span className='tag-exp'>{`${r(exp) * 100 }%`}</span>
   </span>
 }
 

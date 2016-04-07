@@ -29,6 +29,19 @@ textarea{
   display: inline-block;
   background: rgb(197, 205, 212);
 }
+.tag-label{
+  font-weight: bold;
+  font-size: 14px;
+}
+.tag-num{
+  font-size: 12px;
+  padding: 0 0.5em;
+}
+.tag-exp{
+  font-size: 12px;
+  padding: 0 0.5em;
+
+}
 .tag-row.active{
   background: rgb(246, 245, 125);
 }

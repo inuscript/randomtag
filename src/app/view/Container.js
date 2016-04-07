@@ -7,25 +7,20 @@ export default class Container extends Component{
     buildBandit().then(bandit => {
       bandit.num = 25
       bandit.threshold = 170
-      let {tags, hashTags, stats} = bandit.calc()
-      let next = {
-        tags,
-        hashTags,
-        stats
-      }
-      this.setState(next)
+      this.setState({
+        store: bandit.calc()
+      })
     })
   }
   constructor(props) {
     super(props)
      this.state = {
-      tags: null,
-      stats: null
+      store: null
     }
   }
   render () {
-    if(this.state.tags && this.state.stats){
-      return <App {...this.state } />
+    if(this.state.store){
+      return <App {...this.state.store } />
     }
     return <div>Loading...</div>
   }
