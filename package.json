@@ -35,6 +35,7 @@
   },
   "homepage": "https://github.com/inuscript/randomtag#readme",
   "devDependencies": {
+    "@inuscript/eslint-config-inuscript": "^1.0.0",
     "ava": "^0.11.0",
     "babel-cli": "^6.4.5",
     "babel-polyfill": "^6.5.0",
