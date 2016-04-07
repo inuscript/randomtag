@@ -1,5 +1,5 @@
 module.exports = {
     "extends": [
-        "@inuscript/eslint-config-inuscript"
+        "@inuscript/eslint-config"
     ]
 };
