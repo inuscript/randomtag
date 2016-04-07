@@ -24,7 +24,6 @@ class Bandit {
   }
   result(bandit, primaryTags){
     let result = bandit.serialize()
-    let tags = result.concat().map( v => v.label)
     let primaries = primaryTags.map( (tag) => {
       return { label: tag }
     })
@@ -36,7 +35,6 @@ class Bandit {
       }
     })
     return {
-      tags: primaryTags.concat(tags),
       hashTags: tagLabels,
       stats: result,
       n: bandit.n
