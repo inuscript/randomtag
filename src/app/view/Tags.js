@@ -1,13 +1,5 @@
 import React, { Component } from 'react'
-import { round } from 'mathjs'
 
-function r(num){
-  try{
-    return round(num, 2)
-  }catch(e){
-    return NaN
-  }
-}
 
 const Tag = ({tagLabel, onClick}) => {
   // なぜか最後に空白が無いとcssが崩れる。謎。
@@ -15,7 +7,7 @@ const Tag = ({tagLabel, onClick}) => {
   return <span className='tag-item' onClick={onClick}>
     <span className='tag-label'>{`#${label}`}</span>
     <span className='tag-num'>{num}</span>
-    <span className='tag-exp'>{`${r(exp) * 100 }%`}</span>
+    <span className='tag-exp'>{`${Math.ceil(exp * 1000) / 10  }%`}</span>
   </span>
 }
 
