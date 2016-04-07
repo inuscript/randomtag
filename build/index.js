@@ -75119,19 +75119,9 @@ var Container = function (_Component) {
       (0, _bandit2.default)().then(function (bandit) {
         bandit.num = 25;
         bandit.threshold = 170;
-
-        var _bandit$calc = bandit.calc();
-
-        var tags = _bandit$calc.tags;
-        var hashTags = _bandit$calc.hashTags;
-        var stats = _bandit$calc.stats;
-
-        var next = {
-          tags: tags,
-          hashTags: hashTags,
-          stats: stats
-        };
-        _this2.setState(next);
+        _this2.setState({
+          store: bandit.calc()
+        });
       });
     }
   }]);
@@ -75142,8 +75132,7 @@ var Container = function (_Component) {
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Container).call(this, props));
 
     _this.state = {
-      tags: null,
-      stats: null
+      store: null
     };
     return _this;
   }
@@ -75151,8 +75140,8 @@ var Container = function (_Component) {
   _createClass(Container, [{
     key: 'render',
     value: function render() {
-      if (this.state.tags && this.state.stats) {
-        return _react2.default.createElement(_App.App, this.state);
+      if (this.state.store) {
+        return _react2.default.createElement(_App.App, this.state.store);
       }
       return _react2.default.createElement(
         'div',
@@ -75446,14 +75435,23 @@ var Tag = function Tag(_ref) {
   var num = tagLabel.num;
   var exp = tagLabel.exp;
 
-  var msg = '#' + label + '(' + num + ' : ' + r(exp) + ')';
   return _react2.default.createElement(
     'span',
     { className: 'tag-item', onClick: onClick },
     _react2.default.createElement(
       'span',
       { className: 'tag-label' },
-      msg
+      '#' + label
+    ),
+    _react2.default.createElement(
+      'span',
+      { className: 'tag-num' },
+      num
+    ),
+    _react2.default.createElement(
+      'span',
+      { className: 'tag-exp' },
+      r(exp) * 100 + '%'
     )
   );
 };
@@ -75642,9 +75640,6 @@ var Bandit = function () {
       var _this = this;
 
       var result = bandit.serialize();
-      var tags = result.concat().map(function (v) {
-        return v.label;
-      });
       var primaries = primaryTags.map(function (tag) {
         return { label: tag };
       });
@@ -75660,7 +75655,6 @@ var Bandit = function () {
         };
       });
       return {
-        tags: primaryTags.concat(tags),
         hashTags: tagLabels,
         stats: result,
         n: bandit.n
