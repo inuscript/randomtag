@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-
-
+import { withProps, renderComponent, compose } from 'recompose'
 const Tag = ({tagLabel, onClick}) => {
   // なぜか最後に空白が無いとcssが崩れる。謎。
   let {label, num, exp} = tagLabel
@@ -17,7 +16,9 @@ export default class Tags extends Component {
     return <div>{
       hashTags.map((t,i) => {
         if(t.selected){
-          return <Tag key={i} tagLabel={t} onClick={ () => onTagClick(t.label) } />
+          let props = {tagLabel:t, onClick: () => onTagClick(t.label)}
+          let TagItem = withProps(props)(Tag)
+          return <TagItem key={i} />
         }
         return null
       })
