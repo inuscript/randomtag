@@ -1,35 +1,41 @@
 import React, { Component } from 'react'
-import { withProps, compose, branch, renderNothing } from 'recompose'
+import { withProps, compose, branch, renderNothing, renderComponent } from 'recompose'
 
-const Tag = ({tagLabel, onClick}) => {
-  // なぜか最後に空白が無いとcssが崩れる。謎。
+const Tag = (props) => {
+  let {tagLabel, onClick} = props
   let {label, num, exp} = tagLabel
-  return <span className='tag-item' onClick={onClick}>
+  return <span className='tag-item' onClick={onClick} >
     <span className='tag-label'>{`#${label}`}</span>
     <span className='tag-num'>{num}</span>
     <span className='tag-exp'>{`${Math.ceil(exp * 1000) / 10  }%`}</span>
   </span>
 }
 
-const tagWrap = (tag, onTagClick) => (
+const tagWrap = (tag) => (
   branch(
-    () => tag.selected, 
+    () => tag.selected,
     withProps({
-      tagLabel:tag, 
-      onClick: () => onTagClick(tag.label)
+      tagLabel:tag
     }),
     renderNothing()
   )
-)(Tag)
+)
 
 
 export default class Tags extends Component {
   render () {
     let { onTagClick, hashTags } = this.props
     return <div>{
-      hashTags.map((t,i) => {
-        let TagItem = tagWrap(t, onTagClick)
-        return <TagItem key={i} />
+      hashTags.map((t) => {
+        let TagItem = compose(
+          withProps({
+            onClick: () => onTagClick(t.label)
+          }),
+          tagWrap(t)
+        )(Tag)
+        // ↓why?
+        return renderComponent(TagItem)(<div/>)({key: t.label})
+        // return <TagItem key={t.label} />
       })
     }</div>
   }
