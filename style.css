@@ -9,7 +9,8 @@ textarea{
   width: 100%;
   height: 5em;
 }
-.badint-stats tr td{
+.badint-stats tr td,
+.badint-stats tr th{
   border: 1px solid gray;
 }
 .copy-tag{

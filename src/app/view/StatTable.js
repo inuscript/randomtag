@@ -14,7 +14,7 @@ class Row extends Component {
   }
   render () {
     let {className, label, count, expectation, ucb} = this.props
-    return <tr className={className}>
+    return <tr className={className} >
       <td>{label}</td>
       <td>{count}</td>
       <td>{this.round(expectation)}</td>
@@ -23,6 +23,16 @@ class Row extends Component {
     </tr>
   }
 }
+
+const TableHead = () => (
+  <tr className='tag-row'>
+    <th>Label</th>
+    <th>Count</th>
+    <th>Exp</th>
+    <th>UCB</th>
+    <th>UCB - Exp</th>
+  </tr>
+)
 
 export default class BanditStats extends Component {
   render () {
@@ -37,6 +47,9 @@ export default class BanditStats extends Component {
       attrs.key = i
       return <Row {...attrs} />
     })
-    return <table className='badint-stats'><tbody>{rows}</tbody></table>
+    return <table className='badint-stats'>
+      <thead><TableHead/></thead>
+      <tbody>{rows}</tbody>
+    </table>
   }
 }

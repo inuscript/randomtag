@@ -6,7 +6,7 @@ export default class Container extends Component{
   componentDidMount() {
     buildBandit().then(bandit => {
       bandit.num = 25
-      bandit.threshold = 170
+      bandit.threshold = 160
       this.setState({
         store: bandit.calc()
       })
