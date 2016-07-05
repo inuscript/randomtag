@@ -1,8 +1,14 @@
-import Firebase from 'firebase'
-
+// import Firebase from 'firebase'
+var firebase = require('firebase')
+firebase.initializeApp({
+  // apiKey: "apiKey",
+  // authDomain: "thirdsta.firebaseapp.com",
+  databaseURL: "https://thirdsta.firebaseio.com"
+})
+console.log(firebase.database())
 export default class {
   constructor () {
-    this.ref = new Firebase('http://thridsta.firebaseio.com')
+    this.ref = new Firebase('http://thridsta.firebaseio.com/messages')
   }
   media () {
     // after 2015-12-28
