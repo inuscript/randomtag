@@ -57,6 +57,7 @@
   "dependencies": {
     "@inuscript/dogtag": "^1.1.1",
     "@inuscript/to-zok": "^2.0.0",
+    "aphrodite": "^0.5.0",
     "axios": "^0.9.1",
     "babel-polyfill": "^6.5.0",
     "chance": "^0.8.0",
