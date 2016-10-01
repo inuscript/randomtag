@@ -1,8 +1,16 @@
-import Firebase from 'firebase'
+import firebase from 'firebase'
 
 export default class {
   constructor () {
-    this.ref = new Firebase('http://thridsta.firebaseio.com')
+    const config = {
+      apiKey: "AIzaSyC522es7vT69eg0B-Pd550qNFEmYghLQDA",
+      authDomain: "thridsta.firebaseapp.com",
+      databaseURL: "https://thridsta.firebaseio.com",
+      storageBucket: "thridsta.appspot.com",
+      messagingSenderId: "1077449903960"
+    };
+    firebase.initializeApp(config)
+    this.ref = firebase.database().ref()
   }
   media () {
     // after 2015-12-28
