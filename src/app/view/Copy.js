@@ -1,25 +1,40 @@
 import React, { Component } from 'react'
 import Clipboard from 'clipboard'
 
-export default class Copy extends Component {
+
+class Copy extends Component {
+  constructor(){
+    super()
+    this.buttonId = '__copy__button__'
+    this.targetId = '__copy__button__target__'
+  }
+  componentDidMount(){
+    const { onCopySuccess } = this.props
+    this.clipboard = new Clipboard(`#${this.buttonId}`)
+    this.clipboard.on('success', (e) => {
+      if(onCopySuccess){
+        onCopySuccess(e.text)
+      }
+    })
+  }
+  componentWillUnmount(){
+    this.clipboard.destroy()
+  }
+  render(){
+    const { copyString } = this.props
+    return <div>
+      <button id={this.buttonId} data-clipboard-target={`#${this.targetId}`} >Copy !</button>
+      <div id={this.targetId} className='copy-string'>{copyString}</div>
+    </div>
+  }
+}
+
+export default class CopyTag extends Component {
   get copyString(){
     const { tags } = this.props
     return tags.map((tag) => `#${tag}`).join(' ')
   }
-
   render(){
-    const { onCopySuccess } = this.props
-    const buttonId = '__copy__button__'
-    const targetId = '__copy__button__target__'
-    this.clipboard = new Clipboard(`#${buttonId}`)
-    this.clipboard.on('success', () => {
-      if(onCopySuccess){
-        onCopySuccess()
-      }
-    })
-    return <div>
-      <button id={buttonId} data-clipboard-target={`#${targetId}`} >Copy !</button>
-      <div id={targetId} className='copy-tag'>{this.copyString}</div>
-    </div>
+    return <Copy copyString={this.copyString} {...this.props} />
   }
 }
