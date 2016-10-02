@@ -48,21 +48,11 @@ class Copy extends Component {
   constructor(){
     super()
     this.buttonClassName = '__copy__button__'
-    this.state = {
-      showModal: false
-    }
   }
   componentDidMount(){
     this.clipboard = new Clipboard(`.${this.buttonClassName}`)
     this.clipboard.on('success', (e) => {
-      this.setState({
-        showModal: true
-      })
-      setTimeout( () => {
-        this.setState({
-          showModal: false
-        })
-      }, 1000)
+      this.props.onCopySuccess()
     })
   }
   componentWillUnmount(){
@@ -71,11 +61,32 @@ class Copy extends Component {
   render(){
     const { copyString } = this.props
     return (
+      <CopyButton
+        buttonClassName={ this.buttonClassName }
+        copyString={ copyString }
+      />
+    )
+  }
+}
+
+class CopyWithToast extends Component{
+  constructor(){
+    super()
+    this.state = {
+      showModal: false
+    }
+    this.handleCopySuccess = this._handleCopySuccess.bind(this)
+  }
+  _handleCopySuccess() {
+    this.setState({ showModal: true })
+    setTimeout( () => {
+      this.setState({ showModal: false })
+    }, 1000)
+  }
+  render(){
+    return (
       <div>
-        <CopyButton
-          buttonClassName={ this.buttonClassName }
-          copyString={ copyString }
-        />
+        <Copy {...this.props} onCopySuccess={this.handleCopySuccess} />
         <MessageToast show={this.state.showModal}>Copied!</MessageToast>
       </div>
     )
@@ -88,6 +99,6 @@ export default class CopyTag extends Component {
     return tags.map((tag) => `#${tag}`).join(' ')
   }
   render(){
-    return <Copy copyString={this.copyString} {...this.props} />
+    return <CopyWithToast copyString={this.copyString} {...this.props} />
   }
 }
