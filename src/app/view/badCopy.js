@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Clipboard from 'clipboard'
 
-export default class Copy extends Component {
+export default class CopyTag extends Component {
   get copyString(){
     const { tags } = this.props
     return tags.map((tag) => `#${tag}`).join(' ')
