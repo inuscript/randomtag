@@ -13,7 +13,9 @@ export default class Copy extends Component {
     const targetId = '__copy__button__target__'
     this.clipboard = new Clipboard(`#${buttonId}`)
     this.clipboard.on('success', () => {
-      onCopySuccess()
+      if(onCopySuccess){
+        onCopySuccess()
+      }
     })
     return <div>
       <button id={buttonId} data-clipboard-target={`#${targetId}`} >Copy !</button>
