@@ -1,22 +1,26 @@
 import React, { Component } from 'react'
 import Clipboard from 'clipboard'
+import { StyleSheet, css } from 'aphrodite'
 
-const MessageToast = ({show, children}) => {
-  if(!show){
-    return <noscript />
-  }
-  const modalStyle = {
+const style = StyleSheet.create({
+  toast: {
     position: "fixed",
     right: 10,
     bottom: 10,
     zIndex: 100,
-    background: "rgb(146, 223, 145)",
+    background: "rgb(164, 238, 163)",
     color: "rgb(41, 62, 41)",
     padding: 8,
     fontSize: 12,
     borderRadius: 8
   }
-  return <div style={modalStyle}>{children}</div>
+})
+
+const MessageToast = ({show, children}) => {
+  if(!show){
+    return <noscript />
+  }
+  return <div className={css(style.toast)}>{children}</div>
 }
 
 const CopyButton = ({ buttonClassName, copyString }) => {
