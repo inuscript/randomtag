@@ -1,16 +1,19 @@
 import React, { Component } from 'react'
 import Clipboard from 'clipboard'
 
-export default class Copy extends Component {
+export default class CopyTag extends Component {
   get copyString(){
-    let { tags } = this.props
+    const { tags } = this.props
     return tags.map((tag) => `#${tag}`).join(' ')
   }
 
   render(){
-    let buttonId = '__copy__button__'
-    let targetId = '__copy__button__target__'
+    const buttonId = '__copy__button__'
+    const targetId = '__copy__button__target__'
     this.clipboard = new Clipboard(`#${buttonId}`)
+    this.clipboard.on('success', () => {
+      console.log("success")
+    })
     return <div>
       <button id={buttonId} data-clipboard-target={`#${targetId}`} >Copy !</button>
       <div id={targetId} className='copy-tag'>{this.copyString}</div>
