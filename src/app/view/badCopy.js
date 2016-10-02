@@ -16,6 +16,14 @@ export default class CopyTag extends Component {
     this.clipboard.on('success', (e) => {
       if(onCopySuccess){
         onCopySuccess(e.text)
+        this.setState({
+          showModal: true
+        })
+        setTimeout( () => {
+          this.setState({
+            showModal: false
+          })
+        }, 1000)
       }
     })
   }

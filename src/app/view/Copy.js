@@ -13,13 +13,24 @@ const style = StyleSheet.create({
     padding: 8,
     fontSize: 12,
     borderRadius: 8
+  },
+  copyString: {
+    borderRadius: "1em",
+    padding: "1em",
+    color: "#125688",
+    background: "rgb(197, 205, 212)",
+    fontSize: "small",
+    select: "all"
   }
 })
+export const copyStyle = style
 
 const MessageToast = ({show, children}) => {
+  console.log("TSST")
   if(!show){
     return <noscript />
   }
+  console.log("show")
   return <div className={css(style.toast)}>{children}</div>
 }
 
@@ -30,7 +41,7 @@ const CopyButton = ({ buttonClassName, copyString }) => {
       <button
         className={buttonClassName}
         data-clipboard-target={`#${targetId}`} >Copy !</button>
-      <div id={targetId} className='copy-string'>{copyString}</div>
+      <div id={targetId} className={css(style.copyString)}>{copyString}</div>
     </span>
   )
 }
@@ -44,20 +55,16 @@ class Copy extends Component {
     }
   }
   componentDidMount(){
-    const { onCopySuccess } = this.props
     this.clipboard = new Clipboard(`.${this.buttonClassName}`)
     this.clipboard.on('success', (e) => {
-      if(onCopySuccess){
-        onCopySuccess(e.text)
+      this.setState({
+        showModal: true
+      })
+      setTimeout( () => {
         this.setState({
-          showModal: true
+          showModal: false
         })
-        setTimeout( () => {
-          this.setState({
-            showModal: false
-          })
-        }, 1000)
-      }
+      }, 1000)
     })
   }
   componentWillUnmount(){

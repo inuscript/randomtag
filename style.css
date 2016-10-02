@@ -13,14 +13,7 @@ textarea{
 .badint-stats tr th{
   border: 1px solid gray;
 }
-.copy-tag{
-  border-radius: 1em;
-  padding: 1em;
-  color: #125688;
-  background: rgb(197, 205, 212);
-  font-size: small;
-  -webkit-user-select: all;
-}
+
 .tag-item{
   font-size: 12px;
   cursor: pointer;
