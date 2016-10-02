@@ -1,6 +1,24 @@
 import React, { Component } from 'react'
 import Clipboard from 'clipboard'
 
+const MessageToast = ({show, children}) => {
+  if(!show){
+    return <noscript />
+  }
+  const modalStyle = {
+    position: "fixed",
+    right: 10,
+    bottom: 10,
+    zIndex: 100,
+    background: "rgb(146, 223, 145)",
+    color: "rgb(41, 62, 41)",
+    padding: 8,
+    fontSize: 12,
+    borderRadius: 8
+  }
+  return <div style={modalStyle}>{children}</div>
+}
+
 const CopyButton = ({ buttonClassName, copyString }) => {
   const targetId = `copy__button__target`
   return (
@@ -17,6 +35,9 @@ class Copy extends Component {
   constructor(){
     super()
     this.buttonClassName = '__copy__button__'
+    this.state = {
+      showModal: false
+    }
   }
   componentDidMount(){
     const { onCopySuccess } = this.props
@@ -24,6 +45,14 @@ class Copy extends Component {
     this.clipboard.on('success', (e) => {
       if(onCopySuccess){
         onCopySuccess(e.text)
+        this.setState({
+          showModal: true
+        })
+        setTimeout( () => {
+          this.setState({
+            showModal: false
+          })
+        }, 1000)
       }
     })
   }
@@ -32,10 +61,15 @@ class Copy extends Component {
   }
   render(){
     const { copyString } = this.props
-    return <CopyButton
-      buttonClassName={ this.buttonClassName }
-      copyString={ copyString }
-    />
+    return (
+      <div>
+        <CopyButton
+          buttonClassName={ this.buttonClassName }
+          copyString={ copyString }
+        />
+        <MessageToast show={this.state.showModal}>Copied!</MessageToast>
+      </div>
+    )
   }
 }
 
