@@ -69,17 +69,13 @@ class Copy extends Component {
   }
 }
 
-export default class CopyWithToast extends Component{
+class CopyWithToast extends Component{
   constructor(){
     super()
     this.state = {
       showModal: false
     }
     this.handleCopySuccess = this._handleCopySuccess.bind(this)
-  }
-  get copyString(){
-    const { tags } = this.props
-    return tags.map((tag) => `#${tag}`).join(' ')
   }
   _handleCopySuccess() {
     this.setState({ showModal: true })
@@ -90,9 +86,19 @@ export default class CopyWithToast extends Component{
   render(){
     return (
       <div>
-        <Copy copyString={this.copyString} onCopySuccess={this.handleCopySuccess} />
+        <Copy {...this.props} onCopySuccess={this.handleCopySuccess} />
         <MessageToast show={this.state.showModal}>Copied!</MessageToast>
       </div>
     )
+  }
+}
+
+export default class CopyTag extends Component {
+  get copyString(){
+    const { tags } = this.props
+    return tags.map((tag) => `#${tag}`).join(' ')
+  }
+  render(){
+    return <CopyWithToast copyString={this.copyString} {...this.props} />
   }
 }
