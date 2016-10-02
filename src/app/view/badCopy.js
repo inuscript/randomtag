@@ -9,7 +9,7 @@ export default class CopyTag extends Component {
   constructor(){
     super()
     this.buttonId = '__copy__button__'
-    this.targetId = '__copy__button__target__'
+    this.targetId = '__copy__button__target__' + Math.random()
   }
   componentDidMount(){
     const { onCopySuccess } = this.props

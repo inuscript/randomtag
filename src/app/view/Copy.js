@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import Clipboard from 'clipboard'
 
-
 class Copy extends Component {
   constructor(){
     super()
-    this.buttonId = '__copy__button__'
-    this.targetId = '__copy__button__target__'
+    this.buttonId = '__copy__button__' 
+    this.targetId = '__copy__button__target__' + Math.random()
   }
   componentDidMount(){
     const { onCopySuccess } = this.props
