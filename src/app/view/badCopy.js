@@ -8,12 +8,11 @@ export default class CopyTag extends Component {
   }
   constructor(){
     super()
-    this.buttonId = '__copy__button__'
-    this.targetId = '__copy__button__target__' + Math.random()
+    this.buttonClassName = '__copy__button__'
   }
   componentDidMount(){
     const { onCopySuccess } = this.props
-    this.clipboard = new Clipboard(`#${this.buttonId}`)
+    this.clipboard = new Clipboard(`.${this.buttonId}`)
     this.clipboard.on('success', (e) => {
       if(onCopySuccess){
         onCopySuccess(e.text)
@@ -24,9 +23,11 @@ export default class CopyTag extends Component {
     this.clipboard.destroy()
   }
   render(){
+    const targetId = '__copy__button__target__' + Math.random()
+
     return <div>
-      <button id={this.buttonId} data-clipboard-target={`#${this.targetId}`} >Copy !</button>
-      <div id={this.targetId} className='copy-tag'>{this.copyString}</div>
+      <button className={this.className} data-clipboard-target={`#${targetId}`} >Copy !</button>
+      <div id={targetId} className='copy-tag'>{this.copyString}</div>
     </div>
   }
 }

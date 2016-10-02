@@ -1,15 +1,26 @@
 import React, { Component } from 'react'
 import Clipboard from 'clipboard'
 
+const CopyButton = ({ buttonClassName, copyString }) => {
+  const targetId = `copy__button__target`
+  return (
+    <span>
+      <button
+        className={buttonClassName}
+        data-clipboard-target={`#${targetId}`} >Copy !</button>
+      <div id={targetId} className='copy-string'>{copyString}</div>
+    </span>
+  )
+}
+
 class Copy extends Component {
   constructor(){
     super()
-    this.buttonId = '__copy__button__' 
-    this.targetId = '__copy__button__target__' + Math.random()
+    this.buttonClassName = '__copy__button__'
   }
   componentDidMount(){
     const { onCopySuccess } = this.props
-    this.clipboard = new Clipboard(`#${this.buttonId}`)
+    this.clipboard = new Clipboard(`.${this.buttonClassName}`)
     this.clipboard.on('success', (e) => {
       if(onCopySuccess){
         onCopySuccess(e.text)
@@ -21,10 +32,10 @@ class Copy extends Component {
   }
   render(){
     const { copyString } = this.props
-    return <div>
-      <button id={this.buttonId} data-clipboard-target={`#${this.targetId}`} >Copy !</button>
-      <div id={this.targetId} className='copy-string'>{copyString}</div>
-    </div>
+    return <CopyButton
+      buttonClassName={ this.buttonClassName }
+      copyString={ copyString }
+    />
   }
 }
 
