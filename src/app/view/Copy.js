@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Clipboard from 'clipboard'
+import uuid from 'uuid'
 import { StyleSheet, css } from 'aphrodite'
 
 const style = StyleSheet.create({
@@ -23,19 +24,16 @@ const style = StyleSheet.create({
     select: "all"
   }
 })
-export const copyStyle = style
 
 const MessageToast = ({show, children}) => {
-  console.log("TSST")
   if(!show){
     return <noscript />
   }
-  console.log("show")
   return <div className={css(style.toast)}>{children}</div>
 }
 
 const CopyButton = ({ buttonClassName, copyString }) => {
-  const targetId = `copy__button__target`
+  const targetId = `copy__button__target_${uuid()}`
   return (
     <span>
       <button
