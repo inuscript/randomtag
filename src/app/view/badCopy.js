@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Clipboard from 'clipboard'
-import uuid from 'uuid'
+import uniqueId from './uniqueId'
 import { StyleSheet, css } from 'aphrodite'
 
 const style = StyleSheet.create({
@@ -56,7 +56,7 @@ export default class CopyTag extends Component {
     this.clipboard.destroy()
   }
   render(){
-    const targetId = `copy__button__target_${uuid()}`
+    const targetId = `copy__button__target_${uniqueId()}`
     return <div>
       <button className={this.buttonClassName} data-clipboard-target={`#${targetId}`} >Copy !</button>
       <div id={targetId} className='copy-tag'>{this.copyString}</div>

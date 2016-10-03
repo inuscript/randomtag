@@ -2,12 +2,12 @@ exports[`BadCopy`] = `
 <div>
   <button
     className="copy__button"
-    data-clipboard-target="#copy__button__target_7b79c82d-d2f2-4041-822d-dcb1381d385e">
+    data-clipboard-target="#copy__button__target_unique-id">
     Copy !
   </button>
   <div
     className="copy-tag"
-    id="copy__button__target_7b79c82d-d2f2-4041-822d-dcb1381d385e">
+    id="copy__button__target_unique-id">
     #foo #baz #bar
   </div>
   <noscript />
@@ -19,12 +19,12 @@ exports[`Copy`] = `
   <span>
     <button
       className="__copy__button__"
-      data-clipboard-target="#copy__button__target_4c6617ab-c6b6-49be-9b6b-debbc963cb05">
+      data-clipboard-target="#copy__button__target_unique-id">
       Copy !
     </button>
     <div
       className="copyString_k502ai"
-      id="copy__button__target_4c6617ab-c6b6-49be-9b6b-debbc963cb05">
+      id="copy__button__target_unique-id">
       #foo #baz #bar
     </div>
   </span>
@@ -37,12 +37,12 @@ exports[`YarisugiCopy`] = `
   <span>
     <button
       className="__copy__button__"
-      data-clipboard-target="#copy__button__target_7c178bb9-2643-4e96-b848-0d308bd2534c">
+      data-clipboard-target="#copy__button__target_unique-id">
       Copy !
     </button>
     <div
       className="copyString_k502ai"
-      id="copy__button__target_7c178bb9-2643-4e96-b848-0d308bd2534c">
+      id="copy__button__target_unique-id">
       #foo #baz #bar
     </div>
   </span>

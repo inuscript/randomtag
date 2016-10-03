@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Clipboard from 'clipboard'
-import uuid from 'uuid'
+import uniqueId from './uniqueId'
 import { StyleSheet, css } from 'aphrodite'
 
 const style = StyleSheet.create({
@@ -33,7 +33,7 @@ const MessageToast = ({show, children}) => {
 }
 
 const CopyButton = ({ buttonClassName, copyString }) => {
-  const targetId = `copy__button__target_${uuid()}`
+  const targetId = `copy__button__target_${uniqueId()}`
   return (
     <span>
       <button
