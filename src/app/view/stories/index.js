@@ -4,7 +4,15 @@ import Copy from '../Copy';
 import BadCopy from '../BadCopy';
 import YarisugiCopy from '../YarisugiCopy';
 
+const TestSkipDecorator = (story) => {
+  if(process.env.NODE_ENV === 'test'){
+    return <div>Test Skip</div>
+  }
+  return story()
+}
+
 storiesOf('Randomtag', module)
+  .addDecorator(TestSkipDecorator)
   .add('Copy', () => (
     <Copy
       onClick={action('onclick')}
