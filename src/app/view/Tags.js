@@ -6,7 +6,6 @@ const Tag = ({tagLabel, onClick}) => {
   let {label, num, exp} = tagLabel
   return <span className='tag-item' onClick={onClick}>
     <span className='tag-label'>{`#${label}`}</span>
-    <span className='tag-num'>{num}</span>
     <span className='tag-exp'>{`${Math.ceil(exp * 1000) / 10  }%`}</span>
   </span>
 }
